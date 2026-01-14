@@ -44,7 +44,6 @@
     display:none; /* hide notch so "Time Logs" heading is fully visible */
   }
 
-
   /* top header bar like screenshot */
   .topbar{
     height:var(--head-h);
@@ -74,7 +73,7 @@
   }
   .topbar .plus svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-  /* NEW: header back arrow (for views screen) */
+  /* header back arrow (for views/add screens) */
   .topbar .backBtn{
     position:absolute;
     left:10px;
@@ -121,7 +120,6 @@
   .hamburger svg{width:22px;height:22px;stroke:#111;fill:none;stroke-width:2;stroke-linecap:round}
 
   /* list */
-  /* list */
   .content{
     flex:1;
     overflow:auto;
@@ -139,7 +137,6 @@
     height:0;
     display:none;                    /* Chrome/Safari */
   }
-
 
   .row{
     background:#fff;
@@ -222,10 +219,9 @@
   .tab svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2}
   .tab.active{color:var(--tabActive);font-weight:700}
 
-  /* NEW: hide tabs when views screen active */
   .tabs.hidden{display:none;}
 
-  /* ------- Screen stack: list -> details -> views ------- */
+  /* ------- Screen stack ------- */
   .screens{position:relative;flex:1;overflow:hidden;background:var(--bg)}
   .screen{
     position:absolute;inset:0;
@@ -256,11 +252,7 @@
     z-index:2;
   }
   .back svg{width:18px;height:18px;stroke:#111;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-  .detailsTitle{
-    font-weight:800;color:var(--accent);
-  }
 
-  /* NEW: Center title (mimic Contact Details) */
   .detailsTitleCentered{
     position:absolute;
     left:50%;
@@ -278,32 +270,14 @@
     flex:1;
     padding-bottom:calc(var(--footer-h) + 16px);
 
-    /* hide scrollbar but keep scroll */
-    scrollbar-width: none;           /* Firefox */
-    -ms-overflow-style: none;        /* IE/Edge legacy */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
   }
-  .detailsBody::-webkit-scrollbar{
-    width:0;height:0;display:none;
-  }
+  .detailsBody::-webkit-scrollbar{width:0;height:0;display:none;}
 
-  .dcard{
-    background:#fff;border:1px solid var(--line);border-radius:14px;
-    padding:14px;margin:10px 0;
-  }
-  .drow{font-size:13px;color:#475569;line-height:1.45;margin:6px 0}
-  .drow b{color:#111}
-  .dcomments{
-    font-size:13px;color:#111;line-height:1.45;
-    margin-top:8px;
-    background:#f8fafc;
-    border:1px dashed #dbe7f8;
-    border-radius:12px;
-    padding:12px;
-  }
-
-  /* NEW: Company Details block (mimic Contact Details header card) */
+  /* Company Details block */
   .companyCard{
     background:#fff;
     border:1px solid var(--line);
@@ -318,7 +292,7 @@
 
   .companyMeta{min-width:0}
   .companyName{
-    font-weight:600; /* toned down */
+    font-weight:600;
     color:#111;
     font-size:16px;
     line-height:1.15;
@@ -334,7 +308,6 @@
   }
   .companySub .k{color:#8a94a6;font-weight:600}
 
-  /* UPDATED: arrow ↗︎ instead of eye */
   .companyViewBtn{
     display:inline-flex;
     align-items:center;
@@ -349,11 +322,9 @@
     font-weight:600;
     line-height:1;
     white-space:nowrap;
-    
   }
 
-
-  /* NEW: action icons row (call/text/email) like screenshot */
+  /* action icons row */
   .actionRow{
     margin:10px 0 12px;
     display:flex;
@@ -372,7 +343,7 @@
   }
   .actionBtn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-  /* NEW: detail field grid for clean scanning */
+  /* detail field grid */
   .fieldCard{
     background:#fff;
     border:1px solid var(--line);
@@ -382,7 +353,7 @@
     margin:12px 0;
   }
   .fieldTitle{
-    font-weight:600; /* toned down */
+    font-weight:600;
     color:#111;
     font-size:14px;
     display:flex;
@@ -399,8 +370,6 @@
     grid-template-columns:1fr;
     gap:8px;
   }
-
-  /* UPDATED: each kv row becomes clickable like edit */
   .kv{
     display:grid;
     grid-template-columns:120px 1fr;
@@ -410,29 +379,22 @@
     padding:6px 0;
     cursor:pointer;
   }
-
-  .kv:active{
-    opacity:.65;
-  }
-
-
-   .k{
+  .kv:active{opacity:.65}
+  .k{
     color:#8a94a6;
     font-weight:400;
     letter-spacing:.2px;
     text-transform:none;
   }
-
-   .v{
+  .v{
     color:#111;
-    font-weight:400; /* toned down */
+    font-weight:400;
     line-height:1.35;
     word-break:break-word;
   }
-
   .mutedV{color:#5b6776;font-weight:500}
 
-  /* NEW: views list (pills like screenshot) */
+  /* views list (pills) */
   .pill{
     background:#fff;
     border:1px solid var(--line);
@@ -446,97 +408,174 @@
     cursor:pointer;
   }
 
-/* ---------- Add Time Log form ---------- */
-.formCard{
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:18px;
-  box-shadow:0 8px 22px rgba(15,45,86,.08);
-  padding:14px;
-  margin:12px 0;
-}
+  /* ---------- Add Time Log form ---------- */
+  .formCard{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    box-shadow:0 8px 22px rgba(15,45,86,.08);
+    padding:14px;
+    margin:12px 0;
+  }
 
-.formLabel{
-  font-size:12px;
-  font-weight:500;
-  color:#64748b;
-  margin:12px 0 6px;
-}
+  .formLabel{
+    font-size:12px;
+    font-weight:500;
+    color:#64748b;
+    margin:12px 0 6px;
+  }
 
-.formInput, .formSelect, .formTextarea{
-  width:100%;
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:12px 12px;
-  font-size:14px;
-  background:#fff;
-  outline:none;
-}
+  .formInput, .formSelect, .formTextarea{
+    width:100%;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:12px 12px;
+    font-size:14px;
+    background:#fff;
+    outline:none;
+  }
 
-.formTextarea{
-  min-height:90px;
-  resize:none;
-}
+  .formTextarea{
+    min-height:90px;
+    resize:none;
+  }
 
-.formRow2{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
+  .formRow2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
 
-.radioRow{
-  display:flex;
-  gap:14px;
-  align-items:center;
-  padding:10px 0 0;
-}
+  .sectionHead{
+    font-weight:500;
+    color:#111;
+    font-size:14px;
+    margin:6px 0 10px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .sectionHead .dot{
+    width:9px;height:9px;border-radius:999px;background:var(--accent);opacity:.85;
+  }
 
-.radioPill{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:10px 12px;
-  border:1px solid var(--line);
-  border-radius:999px;
-  cursor:pointer;
-  user-select:none;
-}
+  .pillRow{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:6px;
+  }
 
-.radioPill input{accent-color:var(--accent)}
+  .choicePill{
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:999px;
+    padding:10px 12px;
+    font-size:13px;
+    cursor:pointer;
+    user-select:none;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    box-shadow:0 6px 14px rgba(15,45,86,.05);
+  }
+  .choicePill:active{opacity:.7}
+  .choicePill.active{
+    border-color:rgba(44,125,191,.6);
+    box-shadow:0 10px 22px rgba(44,125,191,.14);
+  }
+  .choicePill .miniTag{
+    font-size:11px;
+    color:#6b7280;
+    font-weight:600;
+  }
 
-.sectionHead{
-  font-weight:500;
-  color:#111;
-  font-size:14px;
-  margin:6px 0 10px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
+  .choicePill.otherPill{
+    border-color:#cbd5e1;
+    background:#f1f5f9;
+    color:#0f172a;
+  }
 
-.sectionHead .dot{
-  width:9px;height:9px;border-radius:999px;background:var(--accent);opacity:.85;
-}
+  .choicePill.billingCredits{
+    border-color:rgba(44,125,191,.35);
+    background:rgba(44,125,191,.08);
+    color:#0b1b2b;
+  }
+  .choicePill.billingBillable{
+    border-color:rgba(34,197,94,.35);
+    background:rgba(34,197,94,.10);
+    color:#0b2b16;
+  }
+  .choicePill.billingCredits.active{
+    border-color:rgba(44,125,191,.75);
+    box-shadow:0 10px 22px rgba(44,125,191,.16);
+  }
+  .choicePill.billingBillable.active{
+    border-color:rgba(34,197,94,.75);
+    box-shadow:0 10px 22px rgba(34,197,94,.16);
+  }
 
-.primaryBtn{
-  width:100%;
-  padding:14px 14px;
-  border-radius:14px;
-  border:0;
-  background:var(--accent);
-  color:#fff;
-  font-weight:500;
-  font-size:15px;
-  cursor:pointer;
-  box-shadow:0 10px 22px rgba(44,125,191,.22);
-  margin-top:14px;
-}
+  .userChip{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:12px;
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:#fff;
+  }
+  .userLeft{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    min-width:0;
+  }
+  .userAvatar{
+    width:42px;height:42px;border-radius:999px;
+    border:2px solid var(--accent);
+    overflow:hidden;
+    background:#fff;
+    display:grid;place-items:center;
+    flex:0 0 auto;
+  }
+  .userAvatar img{width:100%;height:100%;object-fit:cover;display:block}
+  .userName{
+    font-weight:600;
+    color:#111;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .userEditBtn{
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:8px 10px;
+    font-size:12px;
+    color:var(--accent);
+    cursor:pointer;
+    background:#fff;
+    font-weight:700;
+    white-space:nowrap;
+  }
 
-.primaryBtn:active{opacity:.8}
-
-
+  .primaryBtn{
+    width:100%;
+    padding:14px 14px;
+    border-radius:14px;
+    border:0;
+    background:var(--accent);
+    color:#fff;
+    font-weight:700;
+    font-size:15px;
+    cursor:pointer;
+    box-shadow:0 10px 22px rgba(44,125,191,.22);
+    margin-top:14px;
+  }
+  .primaryBtn:active{opacity:.8}
 </style>
 </head>
+
 <body>
 <div class="wrap">
   <div class="phone">
@@ -550,7 +589,6 @@
         <div class="topbar">
           <div class="title">Time Logs</div>
           <div class="plus" onclick="openAddTimeLog()">
-
             <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
           </div>
         </div>
@@ -582,7 +620,7 @@
         <div class="detailsBody" id="detailsBody"></div>
       </div>
 
-      <!-- NEW Screen 3: Time Log Views -->
+      <!-- Screen 3: Time Log Views -->
       <div class="screen off-right hidden" id="screen-views" aria-hidden="true">
         <div class="topbar">
           <div class="backBtn" onclick="closeViews()">
@@ -595,18 +633,18 @@
         </div>
 
         <div class="searchRow">
-  <div class="search">
-    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-    <input id="viewSearch" placeholder="Search" />
-  </div>
-</div>
-
+          <div class="search">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input id="viewSearch" placeholder="Search" />
+          </div>
+        </div>
 
         <div class="content" style="padding-top:4px;">
           <div id="viewsList"></div>
         </div>
       </div>
-      <!-- NEW Screen 4: Add Time Log -->
+
+      <!-- Screen 4: Add Time Log -->
       <div class="screen off-right hidden" id="screen-add" aria-hidden="true">
         <div class="topbar">
           <div class="backBtn" onclick="closeAddTimeLog()">
@@ -616,27 +654,10 @@
         </div>
 
         <div class="content" style="padding-top:12px;">
+
+          <!-- 1) Duration -->
           <div class="formCard">
-
-            <div class="formLabel">Company</div>
-            <select id="addCompany" class="formSelect"></select>
-
-            <div class="formLabel">Project</div>
-            <select id="addProject" class="formSelect"></select>
-
-            <div class="formLabel">Task</div>
-            <select id="addTask" class="formSelect"></select>
-
-            <div class="formLabel">User</div>
-            <select id="addUser" class="formSelect"></select>
-
-          </div>
-
-          <div class="formCard">
-            <div class="sectionHead"><span class="dot"></span> Time Tracking</div>
-
-            <div class="formLabel">Start Time</div>
-            <input id="addStartTime" type="datetime-local" class="formInput" />
+            <div class="sectionHead"><span class="dot"></span> How long did you spend?</div>
 
             <div class="formRow2">
               <div>
@@ -650,37 +671,101 @@
             </div>
           </div>
 
+          <!-- 2) Logged By -->
           <div class="formCard">
-            <div class="formLabel">Billable</div>
+            <div class="sectionHead"><span class="dot"></span> Logged By</div>
 
-            <div class="radioRow">
-              <label class="radioPill">
-                <input type="radio" name="addBillable" value="Yes" checked />
-                Yes
-              </label>
-              <label class="radioPill">
-                <input type="radio" name="addBillable" value="No" />
-                No
-              </label>
+            <div class="userChip" id="loggedByChip">
+              <div class="userLeft">
+                <div class="userAvatar" id="loggedByAvatar"></div>
+                <div style="min-width:0">
+                  <div class="userName" id="loggedByName">—</div>
+                </div>
+              </div>
+              <div class="userEditBtn" onclick="toggleUserPicker()">Change</div>
             </div>
 
-            <div id="hourlyRateWrap">
+            <div id="userPickerWrap" style="display:none;margin-top:12px;">
+              <div class="formLabel">Select User</div>
+              <select id="addUser" class="formSelect"></select>
+            </div>
+          </div>
+
+          <!-- Company -->
+          <div class="formCard">
+            <div class="sectionHead"><span class="dot"></span> Company</div>
+            <select id="addCompany" class="formSelect"></select>
+          </div>
+
+          <!-- Add to Project -->
+          <div class="formCard">
+            <div class="sectionHead"><span class="dot"></span> Add to a Project?</div>
+
+            <div class="formLabel">Suggested Projects</div>
+            <div class="pillRow" id="projectPills"></div>
+
+            <div id="projectOtherWrap" style="display:none;margin-top:12px;">
+              <input id="projectOtherInput" class="formInput" placeholder="Search project" />
+            </div>
+
+            <select id="addProject" class="formSelect" style="display:none"></select>
+          </div>
+
+          <!-- Task -->
+          <div class="formCard">
+            <div class="sectionHead"><span class="dot"></span> What did you do?</div>
+            <div class="formLabel">Suggested Tasks</div>
+            <div class="pillRow" id="taskPills"></div>
+
+            <div id="taskOtherWrap" style="display:none;margin-top:12px;">
+              <input id="taskOtherInput" class="formInput" placeholder="Search task" />
+            </div>
+
+            <select id="addTask" class="formSelect" style="display:none"></select>
+          </div>
+
+          <!-- Billing -->
+          <div class="formCard">
+            <div class="sectionHead"><span class="dot"></span> Billing</div>
+
+            <div class="formLabel">How should this be billed?</div>
+            <div class="pillRow" id="billingChoiceRow">
+              <div class="choicePill billingCredits" id="pillCredits" onclick="pickBillingMode('credits')">
+                Use <span class="miniTag">(<span id="creditsLabel">0.00</span> credits)</span>
+              </div>
+              <div class="choicePill billingBillable" id="pillBillable" onclick="pickBillingMode('billable')">
+                Make Billable
+              </div>
+            </div>
+
+            <div id="billableRateWrap" style="display:none;margin-top:12px;">
               <div class="formLabel">Hourly Rate</div>
               <input id="addHourlyRate" type="number" min="0" value="500" class="formInput" />
             </div>
 
-            <div class="formLabel">Comments</div>
-            <textarea id="addComments" class="formTextarea" placeholder="Add comments..."></textarea>
-
-            <button class="primaryBtn" onclick="submitNewTimeLog()">Submit Time Log</button>
+            <input type="hidden" id="billingMode" value="credits" />
           </div>
 
+          <!-- Memo -->
+          <div class="formCard">
+            <div class="sectionHead"><span class="dot"></span> Memo</div>
+            <textarea id="addComments" class="formTextarea" placeholder="Add memo / notes..."></textarea>
+          </div>
+
+          <!-- Start Date (ONLY the input — redundant row removed) -->
+          <div class="formCard">
+            <div class="sectionHead"><span class="dot"></span> Start Date</div>
+            <div class="formLabel">Start Date</div>
+            <input id="addStartDate" type="date" class="formInput" />
+          </div>
+
+          <button class="primaryBtn" onclick="submitNewTimeLog()">Submit Time Log</button>
         </div>
       </div>
 
     </div>
 
-    <!-- bottom tabs (same as screenshot) -->
+    <!-- bottom tabs -->
     <div class="tabs" id="tabs">
       <div class="tab">
         <svg viewBox="0 0 24 24"><path d="M3 10.5l9-7 9 7"/><path d="M9 22V12h6v10"/></svg>
@@ -708,7 +793,7 @@
 </div>
 
 <script>
-/* ---------- Time log data (from your prompt) ---------- */
+/* ---------- Time log data ---------- */
 const TIME_LOGS = [
   {
     total: "0 hours, 18 minutes",
@@ -792,6 +877,7 @@ const TIME_LOGS = [
     id: "6960058c74ef3e89a50e7d34"
   }
 ];
+
 /* ---------- Add Time Log dropdown options ---------- */
 const COMPANY_OPTIONS = [
   "Business Law Group",
@@ -826,7 +912,7 @@ const USER_OPTIONS = [
   "Joseph Wadsworth"
 ];
 
-/* ---------- NEW: Views data (from your prompt) ---------- */
+/* ---------- Views data ---------- */
 const TIME_LOG_VIEWS = [
   { name: "Lindsay Germann", tag: "This Month" },
   { name: "Jessica Cahoon", tag: "This Month" },
@@ -844,7 +930,6 @@ const TIME_LOG_VIEWS = [
 
 /* ---------- Helpers ---------- */
 function compactTime(str){
-  // "0 hours, 18 minutes" -> "0h 18m"
   const h = (str.match(/(\d+)\s*hours?/)||[])[1] || "0";
   const m = (str.match(/(\d+)\s*minutes?/)||[])[1] || "0";
   return `${h}h ${m}m`;
@@ -854,13 +939,20 @@ function initialsFromCompany(company){
   if(!parts.length) return "TL";
   return parts.map(p=>p[0].toUpperCase()).join('');
 }
-
-/* NEW: attorney headshot map */
 function attorneyPhotoUrl(user){
   const u = String(user||"").toLowerCase();
   if(u.includes("jessica")) return "https://d34hmiuaex7c0.cloudfront.net/5052/uploads/profile/staffuser/5060/1666032537644.jpg";
   if(u.includes("george")) return "https://d34hmiuaex7c0.cloudfront.net/5052/uploads/profile/staffuser/5054/1665766283321.jpeg";
   return "";
+}
+function escapeHtml(str){
+  return String(str||'')
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;');
+}
+function escapeAttr(s){
+  return String(s||"").replaceAll("'", "\\'").replaceAll('"', '&quot;');
 }
 
 /* ---------- Render list ---------- */
@@ -903,7 +995,6 @@ function renderList(filter=""){
 
   listEl.innerHTML = rows.map(({x,i})=>rowHTML(x,i)).join('');
 
-  // bind click
   listEl.querySelectorAll('.row').forEach(r=>{
     r.addEventListener('click', ()=>{
       const idx = parseInt(r.getAttribute('data-idx'),10);
@@ -948,7 +1039,7 @@ function navBack(){
   }, 360);
 }
 
-/* ---------- NEW: Views navigation (hamburger) ---------- */
+/* ---------- Views navigation ---------- */
 function openViews(){
   renderViews("");
 
@@ -982,7 +1073,8 @@ function closeViews(){
     tabsEl.classList.remove('hidden');
   }, 360);
 }
-/* ---------- NEW: Add Time Log navigation ---------- */
+
+/* ---------- Add Time Log navigation ---------- */
 function openAddTimeLog(){
   initAddForm();
 
@@ -1017,7 +1109,7 @@ function closeAddTimeLog(){
   }, 360);
 }
 
-/* ---------- NEW: Views render + search ---------- */
+/* ---------- Views render + search ---------- */
 const viewsListEl = document.getElementById('viewsList');
 const viewSearchEl = document.getElementById('viewSearch');
 
@@ -1037,10 +1129,7 @@ function renderViews(filter=""){
 
 viewSearchEl.addEventListener('input', (e)=>renderViews(e.target.value));
 
-function escapeAttr(s){
-  return String(s||"").replaceAll("'", "\\'").replaceAll('"', '&quot;');
-}
-/* ---------- NEW: Add Time Log behavior ---------- */
+/* ---------- Add Time Log behavior ---------- */
 function fillSelect(selectEl, options, placeholder){
   selectEl.innerHTML = '';
   if(placeholder){
@@ -1059,65 +1148,305 @@ function fillSelect(selectEl, options, placeholder){
   });
 }
 
+const LOGGED_IN_USER = "Jessica Cahoon";
+
+const USER_RATES = {
+  "Jessica Cahoon": 500,
+  "George Brunt": 450,
+  "Lindsay Germann": 400,
+  "Stephanie Griffey": 425,
+  "Joseph Wadsworth": 350
+};
+
+const TASK_SUGGESTIONS = [
+  "Make Phone Call",
+  "Write Email",
+  "Review Agreement",
+  "Draft Agreement",
+  "Conduct Research",
+  "Conduct Discovery"
+];
+
+const PROJECT_SUGGESTIONS = [
+  { project: "Miscellaneous Legal Work", company: "Business Law Group" },
+  { project: "Contract Review", company: "CorVive" },
+  { project: "Litigation Support", company: "Relive the Magic at Home" },
+  { project: "Employment Matters", company: "Pure Gen Holdings, Inc." },
+  { project: "Trademark / IP", company: "Monson Janitorial Services, Inc." },
+  { project: "Miscellaneous Legal Work", company: "CorVive" }
+];
+
+function ensureOptionValue(selectEl, value){
+  const exists = Array.from(selectEl.options).some(o=>o.value === value);
+  if(!exists){
+    const opt = document.createElement('option');
+    opt.value = value;
+    opt.textContent = value;
+    selectEl.appendChild(opt);
+  }
+}
+
+/* ---- Credits calc (dynamic) ---- */
+function calcCreditsFromDuration(){
+  const hours = parseInt(document.getElementById('addHours').value || "0", 10);
+  const minutes = parseInt(document.getElementById('addMinutes').value || "0", 10);
+  const safeMinutes = Math.max(0, Math.min(59, minutes));
+  const totalHours = Math.max(0, hours) + (safeMinutes / 60);
+
+  // 0.1 credits per hour => credits = hours / 10
+  const credits = totalHours;
+
+  // format nice
+  const rounded = Math.round(credits * 100) / 100;
+  return (rounded % 1 === 0) ? `${rounded.toFixed(0)}` : `${rounded.toFixed(2)}`;
+}
+
+function updateCreditsLabel(){
+  const labelEl = document.getElementById('creditsLabel');
+  if(labelEl) labelEl.textContent = calcCreditsFromDuration();
+}
+
 function initAddForm(){
-  // Fill dropdowns
   fillSelect(document.getElementById('addCompany'), COMPANY_OPTIONS, "Select Company...");
   fillSelect(document.getElementById('addProject'), PROJECT_OPTIONS, "Select Project...");
   fillSelect(document.getElementById('addTask'), TASK_OPTIONS, "Select Task...");
   fillSelect(document.getElementById('addUser'), USER_OPTIONS, "Select User...");
 
-  // Default start time = now (local)
-  const now = new Date();
-  const pad = n => String(n).padStart(2,'0');
-  const local = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
-  document.getElementById('addStartTime').value = local;
-
-  // Default durations
+  // defaults
   document.getElementById('addHours').value = 0;
   document.getElementById('addMinutes').value = 0;
 
-  // Default billable Yes
-  document.querySelectorAll('input[name="addBillable"]').forEach(r=>{
-    r.checked = (r.value === "Yes");
-  });
-  document.getElementById('hourlyRateWrap').style.display = "block";
+  // default user
+  document.getElementById('addUser').value = LOGGED_IN_USER;
+  syncLoggedByChip();
+  syncRateToUser();
 
-  // Toggle billable => hourly rate
-  document.querySelectorAll('input[name="addBillable"]').forEach(r=>{
-    r.onchange = ()=>{
-      const billable = document.querySelector('input[name="addBillable"]:checked')?.value || "Yes";
-      document.getElementById('hourlyRateWrap').style.display = (billable === "Yes") ? "block" : "none";
-    };
-  });
+  // default start date = today
+  const now = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  const today = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+  document.getElementById('addStartDate').value = today;
 
-  // reset comments
+  // billing default
+  pickBillingMode('credits');
+
+  // comments reset
   document.getElementById('addComments').value = "";
+
+  // pills
+  buildTaskPills();
+  buildProjectPills();
+
+  // hide wraps
+  document.getElementById('taskOtherWrap').style.display = "none";
+  document.getElementById('projectOtherWrap').style.display = "none";
+  document.getElementById('userPickerWrap').style.display = "none";
+
+  // dynamic credits
+  updateCreditsLabel();
+
+  // wire listeners
+  document.getElementById('addUser').onchange = ()=>{
+    syncLoggedByChip();
+    syncRateToUser();
+  };
+
+  const hoursEl = document.getElementById('addHours');
+  const minsEl = document.getElementById('addMinutes');
+  hoursEl.oninput = updateCreditsLabel;
+  minsEl.oninput = updateCreditsLabel;
+
+  document.getElementById('taskOtherInput').value = "";
+  document.getElementById('projectOtherInput').value = "";
+
+  document.getElementById('taskOtherInput').oninput = ()=>{
+    const val = document.getElementById('taskOtherInput').value.trim();
+    if(val){
+      ensureOptionValue(document.getElementById('addTask'), val);
+      document.getElementById('addTask').value = val;
+    }
+  };
+
+  document.getElementById('projectOtherInput').oninput = ()=>{
+    const val = document.getElementById('projectOtherInput').value.trim();
+    if(val){
+      ensureOptionValue(document.getElementById('addProject'), val);
+      document.getElementById('addProject').value = val;
+    }
+  };
 }
 
+/* ---- Logged By ---- */
+function syncLoggedByChip(){
+  const user = document.getElementById('addUser').value || LOGGED_IN_USER;
+  document.getElementById('loggedByName').textContent = user;
+
+  const av = document.getElementById('loggedByAvatar');
+  const url = attorneyPhotoUrl(user);
+  av.innerHTML = url
+    ? `<img src="${url}" alt="${escapeHtml(user)}" />`
+    : `<span style="font-weight:800;color:var(--accent)">${user.split(' ').map(x=>x[0]).join('').slice(0,2).toUpperCase()}</span>`;
+}
+function toggleUserPicker(){
+  const wrap = document.getElementById('userPickerWrap');
+  wrap.style.display = (wrap.style.display === "none") ? "block" : "none";
+}
+
+/* ---- Task pills ---- */
+function buildTaskPills(){
+  const pillWrap = document.getElementById('taskPills');
+  pillWrap.innerHTML = '';
+
+  const tasks = TASK_SUGGESTIONS.slice(0,6);
+
+  tasks.forEach(t=>{
+    const pill = document.createElement('div');
+    pill.className = 'choicePill';
+    pill.textContent = t;
+    pill.onclick = ()=> selectTaskPill(t);
+    pillWrap.appendChild(pill);
+  });
+
+  const other = document.createElement('div');
+  other.className = 'choicePill otherPill';
+  other.textContent = `Other Task`;
+  other.onclick = ()=> selectTaskPill('__other__');
+  pillWrap.appendChild(other);
+
+  selectTaskPill(tasks[0]);
+}
+
+function selectTaskPill(task){
+  document.querySelectorAll('#taskPills .choicePill').forEach(p=>p.classList.remove('active'));
+  const pills = Array.from(document.querySelectorAll('#taskPills .choicePill'));
+  const match = pills.find(p=>p.textContent.trim() === task || (task==='__other__' && p.textContent.includes('Other Task')));
+  if(match) match.classList.add('active');
+
+  if(task === '__other__'){
+    const otherPill = pills.find(p=>p.textContent.includes('Other Task'));
+    if(otherPill) otherPill.style.display = "none";
+
+    document.getElementById('taskOtherWrap').style.display = "block";
+    document.getElementById('taskOtherInput').focus();
+    document.getElementById('addTask').value = "";
+  } else {
+    const otherPill = pills.find(p=>p.textContent.includes('Other Task'));
+    if(otherPill) otherPill.style.display = "inline-flex";
+
+    document.getElementById('taskOtherWrap').style.display = "none";
+    ensureOptionValue(document.getElementById('addTask'), task);
+    document.getElementById('addTask').value = task;
+  }
+}
+
+/* ---- Project pills ---- */
+function buildProjectPills(){
+  const wrap = document.getElementById('projectPills');
+  wrap.innerHTML = '';
+
+  const rows = PROJECT_SUGGESTIONS.slice(0,6);
+
+  rows.forEach(r=>{
+    const pill = document.createElement('div');
+    pill.className = 'choicePill';
+    pill.innerHTML = `${r.project}`;
+    pill.onclick = ()=>{
+      selectProjectPill(r.project);
+      if(!document.getElementById('addCompany').value){
+        ensureOptionValue(document.getElementById('addCompany'), r.company);
+        document.getElementById('addCompany').value = r.company;
+      }
+    };
+    wrap.appendChild(pill);
+  });
+
+  const other = document.createElement('div');
+  other.className = 'choicePill otherPill';
+  other.textContent = `Other Project`;
+  other.onclick = ()=> selectProjectPill('__other__');
+  wrap.appendChild(other);
+
+  selectProjectPill(rows[0].project);
+}
+
+function selectProjectPill(project){
+  document.querySelectorAll('#projectPills .choicePill').forEach(p=>p.classList.remove('active'));
+  const pills = Array.from(document.querySelectorAll('#projectPills .choicePill'));
+  const match = pills.find(p=>{
+    if(project === '__other__') return p.textContent.includes('Other Project');
+    return p.textContent.includes(project);
+  });
+  if(match) match.classList.add('active');
+
+  if(project === '__other__'){
+    const otherPill = pills.find(p=>p.textContent.includes('Other Project'));
+    if(otherPill) otherPill.style.display = "none";
+
+    document.getElementById('projectOtherWrap').style.display = "block";
+    document.getElementById('projectOtherInput').focus();
+    document.getElementById('addProject').value = "";
+  } else {
+    const otherPill = pills.find(p=>p.textContent.includes('Other Project'));
+    if(otherPill) otherPill.style.display = "inline-flex";
+
+    document.getElementById('projectOtherWrap').style.display = "none";
+    ensureOptionValue(document.getElementById('addProject'), project);
+    document.getElementById('addProject').value = project;
+  }
+}
+
+/* ---- Billing choice ---- */
+function pickBillingMode(mode){
+  const creditsPill = document.getElementById('pillCredits');
+  const billablePill = document.getElementById('pillBillable');
+
+  creditsPill.classList.remove('active');
+  billablePill.classList.remove('active');
+
+  if(mode === 'credits'){
+    creditsPill.classList.add('active');
+    document.getElementById('billableRateWrap').style.display = "none";
+    document.getElementById('billingMode').value = "credits";
+  } else {
+    billablePill.classList.add('active');
+    document.getElementById('billableRateWrap').style.display = "block";
+    document.getElementById('billingMode').value = "billable";
+  }
+}
+
+/* ---- Rate ---- */
+function syncRateToUser(){
+  const user = document.getElementById('addUser').value || LOGGED_IN_USER;
+  const rate = USER_RATES[user] ?? 500;
+  document.getElementById('addHourlyRate').value = rate;
+}
+
+/* ---------- Submit Time Log ---------- */
 function submitNewTimeLog(){
   const company = document.getElementById('addCompany').value;
   const project = document.getElementById('addProject').value;
   const task = document.getElementById('addTask').value;
-  const user = document.getElementById('addUser').value;
+  const user = document.getElementById('addUser').value || LOGGED_IN_USER;
 
-  const startTime = document.getElementById('addStartTime').value;
   const hours = parseInt(document.getElementById('addHours').value || "0", 10);
   const minutes = parseInt(document.getElementById('addMinutes').value || "0", 10);
-  const comments = document.getElementById('addComments').value || "";
-
-  const billable = document.querySelector('input[name="addBillable"]:checked')?.value || "Yes";
-  const hourlyRate = parseFloat(document.getElementById('addHourlyRate').value || "0");
-
-  // Basic validation
-  if(!company || !project || !task || !user){
-    alert("Please select Company, Project, Task, and User.");
-    return;
-  }
-
   const safeMinutes = Math.max(0, Math.min(59, minutes));
   const totalLabel = `${hours} hours, ${safeMinutes} minutes`;
 
-  // Create new log
+  const comments = document.getElementById('addComments').value || "";
+  const startDate = document.getElementById('addStartDate').value;
+
+  const billingMode = document.getElementById('billingMode').value || "credits";
+  const billable = (billingMode === "billable") ? "Yes" : "No";
+  const hourlyRate = parseFloat(document.getElementById('addHourlyRate').value || "0");
+
+  // credits based on duration
+  const credits = calcCreditsFromDuration();
+
+  if(!company){ alert("Please select a Company."); return; }
+  if(!task){ alert("Please choose a Task (or use Other Task)."); return; }
+  if(!project){ alert("Please choose a Project (or use Other Project)."); return; }
+
   const newLog = {
     total: totalLabel,
     company,
@@ -1128,33 +1457,30 @@ function submitNewTimeLog(){
     id: "new_" + Math.random().toString(16).slice(2)
   };
 
-  // Add to top of list
   TIME_LOGS.unshift(newLog);
 
-  // Refresh list + close screen
   renderList(document.getElementById('q').value || "");
   closeAddTimeLog();
 
-  // Optional: open details instantly
-  // openDetails(0);
-
-  // Demo: show values (remove if you want silent)
   console.log("Submitted Time Log:", {
-    company, project, task, user, startTime, hours, minutes: safeMinutes, billable, hourlyRate, comments
+    company, project, task, user,
+    startDate,
+    hours, minutes: safeMinutes,
+    billingMode, billable, hourlyRate,
+    credits,
+    comments
   });
 }
 
-/* ---------- Details ---------- */
+/* ---------- Details (unchanged) ---------- */
 function openDetails(idx){
   const x = TIME_LOGS[idx];
   if(!x) return;
 
-  // Dummy additional fields (requested)
   const companyId = "2790715";
   const createdAt = "01/08/2026 2:22 PM";
   const startTime = "12/22/2026 2:21 PM";
   const billable = (idx % 2 === 0) ? "Yes" : "No";
-  const billingMethod = (billable === "Yes") ? ((idx % 3 === 0) ? "Hourly" : "Credits") : "—";
   const hourlyRate = 500;
   const hourlyAmount = "$50";
   const billableHours = "0.10 hrs";
@@ -1162,7 +1488,6 @@ function openDetails(idx){
   const creditsUsed = "0.2 credits";
 
   document.getElementById('detailsBody').innerHTML = `
-  <!-- Company details card (mimic contact details section) -->
   <div class="companyCard">
     <div class="companyMeta">
       <div class="companyName">${x.company}</div>
@@ -1170,12 +1495,9 @@ function openDetails(idx){
         <span class="k">Company ID:</span> <span style="font-weight:500;color:#111">${companyId}</span>
       </div>
     </div>
-
-    <div class="companyViewBtn" onclick="viewCompany('${escapeAttr(x.company)}','${companyId}')"
-      title="View Company">View Company ↗︎</div>
+    <div class="companyViewBtn" onclick="viewCompany('${escapeAttr(x.company)}','${companyId}')" title="View Company">View Company ↗︎</div>
   </div>
 
-  <!-- icons row (only call, text, email) -->
   <div class="actionRow">
     <div class="actionBtn" onclick="actionCall()" title="Call">
       <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.08 4.18 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.86.31 1.7.57 2.5a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.58-1.09a2 2 0 0 1 2.11-.45c.8.26 1.64.45 2.5.57A2 2 0 0 1 22 16.92z"/></svg>
@@ -1188,189 +1510,66 @@ function openDetails(idx){
     </div>
   </div>
 
-  <!-- Time summary -->
   <div class="fieldCard">
     <div class="fieldTitle"><span class="dot"></span> Time Log Summary</div>
     <div class="kvGrid">
-
-      <!-- ✅ Editable -->
-      <div class="kv" onclick="editField('Total Time Logged','${escapeAttr(x.total)}', this)">
+      <div class="kv">
         <div class="k">Total Time</div>
         <div class="v">${x.total}</div>
       </div>
-
-      <!-- ❌ Not Editable -->
       <div class="kv">
         <div class="k">Created At</div>
         <div class="v">${createdAt}</div>
       </div>
-
-      <!-- ✅ Editable -->
-      <div class="kv" onclick="editField('Start Time','${escapeAttr(startTime)}', this)">
+      <div class="kv">
         <div class="k">Start Time</div>
         <div class="v">${startTime}</div>
       </div>
-
-      <!-- ❌ Not Editable -->
       <div class="kv">
         <div class="k">Task</div>
         <div class="v">${x.task}</div>
       </div>
-
-      <!-- ❌ Not Editable -->
       <div class="kv">
         <div class="k">Project</div>
         <div class="v">${x.project}</div>
       </div>
-
-      <!-- ❌ Not Editable -->
       <div class="kv">
         <div class="k">Logged By</div>
         <div class="v">${x.user}</div>
       </div>
-
-      <!-- ❌ Not Editable -->
       <div class="kv">
         <div class="k">Time Log ID</div>
         <div class="v" style="color:#6b7280;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:12px">${x.id}</div>
       </div>
-
-      <!-- ✅ Editable -->
-      <div class="kv" onclick="editField('Comments','${escapeAttr(x.comments)}', this)">
+      <div class="kv">
         <div class="k">Comments</div>
         <div class="v" style="color:#5b6776">${escapeHtml(x.comments)}</div>
       </div>
-
     </div>
   </div>
 
-  <!-- Billing (✅ ALL Editable) -->
   <div class="fieldCard">
     <div class="fieldTitle"><span class="dot"></span> Billing</div>
     <div class="kvGrid">
-
-      <div class="kv" onclick="editField('Billable','${escapeAttr(billable)}', this)">
-        <div class="k">Billable</div>
-        <div class="v">${billable}</div>
-      </div>
-
-      <div class="kv" onclick="editField('Hourly Rate','${escapeAttr(billable === "Yes" ? `$${hourlyRate}/hr` : "—")}', this)">
-        <div class="k">Hourly Rate</div>
-        <div class="v">${billable === "Yes" ? `$${hourlyRate}/hr` : `<span class="mutedV">—</span>`}</div>
-      </div>
-
-      <div class="kv" onclick="editField('Hourly Amount','${escapeAttr(billable === "Yes" ? hourlyAmount : "—")}', this)">
-        <div class="k">Hourly Amount</div>
-        <div class="v">${billable === "Yes" ? hourlyAmount : `<span class="mutedV">—</span>`}</div>
-      </div>
-
-      <div class="kv" onclick="editField('Billable Hours','${escapeAttr(billable === "Yes" ? billableHours : "—")}', this)">
-        <div class="k">Billable Hours</div>
-        <div class="v">${billable === "Yes" ? billableHours : `<span class="mutedV">—</span>`}</div>
-      </div>
-
-      <div class="kv" onclick="editField('Billable Amount','${escapeAttr(billable === "Yes" ? billableAmount : "—")}', this)">
-        <div class="k">Billable Amount</div>
-        <div class="v">${billable === "Yes" ? billableAmount : `<span class="mutedV">—</span>`}</div>
-      </div>
-
-      <div class="kv" onclick="editField('Credits Used','${escapeAttr(billable === "Yes" ? creditsUsed : "0 credits")}', this)">
-        <div class="k">Credits Used</div>
-        <div class="v">${billable === "Yes" ? creditsUsed : `<span class="mutedV">0 credits</span>`}</div>
-      </div>
-
+      <div class="kv"><div class="k">Billable</div><div class="v">${billable}</div></div>
+      <div class="kv"><div class="k">Hourly Rate</div><div class="v">${billable === "Yes" ? `$${hourlyRate}/hr` : `<span class="mutedV">—</span>`}</div></div>
+      <div class="kv"><div class="k">Hourly Amount</div><div class="v">${billable === "Yes" ? hourlyAmount : `<span class="mutedV">—</span>`}</div></div>
+      <div class="kv"><div class="k">Billable Hours</div><div class="v">${billable === "Yes" ? billableHours : `<span class="mutedV">—</span>`}</div></div>
+      <div class="kv"><div class="k">Billable Amount</div><div class="v">${billable === "Yes" ? billableAmount : `<span class="mutedV">—</span>`}</div></div>
+      <div class="kv"><div class="k">Credits Used</div><div class="v">${billable === "Yes" ? creditsUsed : `<span class="mutedV">0 credits</span>`}</div></div>
     </div>
   </div>
 `;
-
-
   navToDetails();
 }
 
-function escapeHtml(str){
-  return String(str||'')
-    .replaceAll('&','&amp;')
-    .replaceAll('<','&lt;')
-    .replaceAll('>','&gt;');
-}
-
-/* NEW: inline edit UX (tap -> textbox) */
-function editField(label, currentValue, el){
-  if(!el) return;
-
-  // prevent double-activating if already editing
-  if(el.getAttribute("data-editing") === "1") return;
-  el.setAttribute("data-editing","1");
-
-  const vEl = el.querySelector(".v");
-  if(!vEl){
-    el.setAttribute("data-editing","0");
-    return;
-  }
-
-  const originalText = String(currentValue ?? "").trim();
-  const isComments = label.toLowerCase().includes("comment");
-
-  // build input control
-  const input = document.createElement(isComments ? "textarea" : "input");
-  input.value = originalText;
-
-  // style input like native mobile field
-  input.style.width = "100%";
-  input.style.border = "1px solid var(--line)";
-  input.style.borderRadius = "10px";
-  input.style.padding = "10px 12px";
-  input.style.fontSize = "13px";
-  input.style.fontFamily = "inherit";
-  input.style.color = "var(--ink)";
-  input.style.outline = "none";
-  input.style.background = "#fff";
-
-  if(isComments){
-    input.style.minHeight = "78px";
-    input.style.resize = "none";
-  } else {
-    input.type = "text";
-  }
-
-  // clear value node + insert input
-  vEl.innerHTML = "";
-  vEl.appendChild(input);
-
-  // focus cursor end
-  setTimeout(()=>{
-    input.focus();
-    if(input.setSelectionRange && !isComments){
-      const len = input.value.length;
-      input.setSelectionRange(len,len);
-    }
-  }, 0);
-
-  function commit(){
-    const newVal = input.value.trim() || "—";
-    vEl.textContent = newVal;
-
-    el.setAttribute("data-editing","0");
-
-    // demo: show saved
-    // console.log("Saved", label, newVal);
-  }
-
-  input.addEventListener("blur", commit);
-
-  // Enter to save (input only)
-  input.addEventListener("keydown", (e)=>{
-    if(!isComments && e.key === "Enter"){
-      e.preventDefault();
-      input.blur();
-    }
-  });
-}
-
-
-
-/* ---------- Demo buttons ---------- */
+/* ---------- Demo stubs ---------- */
 function demoViewsPlus(){ alert("Plus tapped — create a new Time Log View."); }
+function pickView(){ alert("View selected (demo)"); }
+function viewCompany(){ alert("View company (demo)"); }
+function actionCall(){ alert("Call (demo)"); }
+function actionText(){ alert("Text (demo)"); }
+function actionEmail(){ alert("Email (demo)"); }
 
 /* Init */
 renderList();
@@ -1378,4 +1577,3 @@ renderViews();
 </script>
 </body>
 </html>
-
