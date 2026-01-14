@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Time Logs</title>
+<style>
+  :root{
+    --bg:#f6f8fb;
+    --card:#ffffff;
+    --ink:#1f2937;
+    --muted:#7b8794;
+    --line:#e7edf5;
+    --accent:#2c7dbf;         /* matches screenshot-ish blue */
+    --tab:#8b96a8;
+    --tabActive:#2c7dbf;
+    --phone-w:430px;
+    --phone-h:800px;
+    --footer-h:74px;
+    --status-h:44px;
+    --head-h:56px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink)}
+  .wrap{display:flex;align-items:center;justify-content:center;min-height:100%;padding:18px}
+
+  /* phone shell */
+  .phone{
+    width:var(--phone-w);
+    height:var(--phone-h);
+    background:#fff;
+    border-radius:34px;
+    box-shadow:0 20px 60px rgba(0,0,0,.12),0 8px 16px rgba(0,0,0,.08);
+    border:8px solid #111;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+   .notch{
+    position:absolute;top:8px;left:50%;transform:translateX(-50%);
+    width:180px;height:30px;background:#111;border-radius:20px 20px 28px 28px;z-index:9;
+    display:none; /* hide notch so "Time Logs" heading is fully visible */
+  }
+
+
+  /* top header bar like screenshot */
+  .topbar{
+    height:var(--head-h);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-bottom:1px solid var(--line);
+    background:#fff;
+    position:sticky;top:0;z-index:5;
+  }
+  .topbar .title{
+    font-weight:700;
+    color:var(--accent);
+    font-size:20px;
+    letter-spacing:.2px;
+  }
+  .topbar .plus{
+    position:absolute;
+    right:14px;
+    width:28px;height:28px;
+    display:grid;place-items:center;
+    border-radius:999px;
+    border:2px solid var(--accent);
+    color:var(--accent);
+    background:#fff;
+    cursor:pointer;
+  }
+  .topbar .plus svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+  /* NEW: header back arrow (for views screen) */
+  .topbar .backBtn{
+    position:absolute;
+    left:10px;
+    width:36px;height:36px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    display:grid;place-items:center;
+    cursor:pointer;
+    background:#fff;
+    color:#111;
+  }
+  .topbar .backBtn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+  /* search row */
+  .searchRow{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 12px;
+    background:#fff;
+  }
+  .search{
+    flex:1;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 12px;
+    border:2px solid #111;
+    border-radius:10px;
+    background:#fff;
+  }
+  .search svg{width:18px;height:18px;stroke:#111;fill:none;stroke-width:2}
+  .search input{
+    border:0;outline:none;width:100%;
+    font-size:14px;
+  }
+  .hamburger{
+    width:42px;height:42px;
+    border-radius:10px;
+    display:grid;place-items:center;
+    cursor:pointer;
+    background:#fff;
+  }
+  .hamburger svg{width:22px;height:22px;stroke:#111;fill:none;stroke-width:2;stroke-linecap:round}
+
+  /* list */
+  /* list */
+  .content{
+    flex:1;
+    overflow:auto;
+    background:var(--bg);
+    padding:10px 10px calc(var(--footer-h) + 10px);
+
+    /* hide scrollbar but keep scroll */
+    scrollbar-width: none;           /* Firefox */
+    -ms-overflow-style: none;        /* IE/Edge legacy */
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  .content::-webkit-scrollbar{
+    width:0;
+    height:0;
+    display:none;                    /* Chrome/Safari */
+  }
+
+
+  .row{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:12px;
+    display:grid;
+    grid-template-columns:56px 1fr 18px;
+    gap:12px;
+    align-items:center;
+    margin:10px 0;
+    box-shadow:0 6px 16px rgba(15,45,86,.06);
+    cursor:pointer;
+  }
+
+  /* UPDATED: Attorney headshot avatars */
+  .avatar{
+    width:44px;height:44px;border-radius:999px;
+    border:2px solid var(--accent);
+    display:grid;place-items:center;
+    background:#fff;
+    overflow:hidden;
+  }
+  .avatar img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .meta{min-width:0}
+  .line1{
+    font-size:16px;
+    font-weight:500;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .line1 .t{
+    font-weight:500;
+    color:#111;
+  }
+  .line1 .dot{opacity:.45;padding:0 6px}
+  .line2{
+    margin-top:2px;
+    font-size:13px;
+    color:#9aa3af;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .chev{
+    justify-self:end;
+    color:#111;
+    opacity:.8;
+  }
+  .chev svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+  /* bottom tab bar */
+  .tabs{
+    height:var(--footer-h);
+    border-top:1px solid var(--line);
+    background:#fff;
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    padding:6px 6px 8px;
+    position:absolute;
+    bottom:0;
+    left:0; right:0;
+  }
+  .tab{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+    color:var(--tab);
+    font-size:11px;
+  }
+  .tab svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2}
+  .tab.active{color:var(--tabActive);font-weight:700}
+
+  /* NEW: hide tabs when views screen active */
+  .tabs.hidden{display:none;}
+
+  /* ------- Screen stack: list -> details -> views ------- */
+  .screens{position:relative;flex:1;overflow:hidden;background:var(--bg)}
+  .screen{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;
+    transform:translateX(0);
+    opacity:1;
+    transition:transform .35s ease, opacity .35s ease;
+    will-change:transform, opacity;
+  }
+  .screen.hidden{opacity:0;pointer-events:none}
+  .screen.off-right{transform:translateX(100%);opacity:0;pointer-events:none}
+  .screen.off-left{transform:translateX(-12%);opacity:0;pointer-events:none}
+
+  /* details screen */
+  .detailsHead{
+    background:#fff;
+    border-bottom:1px solid var(--line);
+    padding:10px 12px;
+    display:flex;align-items:center;gap:10px;
+    position:relative;
+  }
+  .back{
+    width:36px;height:36px;border-radius:10px;
+    border:1px solid var(--line);
+    display:grid;place-items:center;
+    cursor:pointer;
+    background:#fff;
+    z-index:2;
+  }
+  .back svg{width:18px;height:18px;stroke:#111;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .detailsTitle{
+    font-weight:800;color:var(--accent);
+  }
+
+  /* NEW: Center title (mimic Contact Details) */
+  .detailsTitleCentered{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    font-weight:700;
+    color:var(--accent);
+    width:70%;
+    text-align:center;
+    pointer-events:none;
+  }
+
+  .detailsBody{
+    padding:12px;
+    overflow:auto;
+    flex:1;
+    padding-bottom:calc(var(--footer-h) + 16px);
+
+    /* hide scrollbar but keep scroll */
+    scrollbar-width: none;           /* Firefox */
+    -ms-overflow-style: none;        /* IE/Edge legacy */
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  .detailsBody::-webkit-scrollbar{
+    width:0;height:0;display:none;
+  }
+
+  .dcard{
+    background:#fff;border:1px solid var(--line);border-radius:14px;
+    padding:14px;margin:10px 0;
+  }
+  .drow{font-size:13px;color:#475569;line-height:1.45;margin:6px 0}
+  .drow b{color:#111}
+  .dcomments{
+    font-size:13px;color:#111;line-height:1.45;
+    margin-top:8px;
+    background:#f8fafc;
+    border:1px dashed #dbe7f8;
+    border-radius:12px;
+    padding:12px;
+  }
+
+  /* NEW: Company Details block (mimic Contact Details header card) */
+  .companyCard{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    box-shadow:0 8px 22px rgba(15,45,86,.08);
+    padding:14px;
+    display:grid;
+    grid-template-columns:1fr 44px;
+    gap:12px;
+    align-items:center;
+  }
+
+  .companyMeta{min-width:0}
+  .companyName{
+    font-weight:600; /* toned down */
+    color:#111;
+    font-size:16px;
+    line-height:1.15;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .companySub{
+    margin-top:6px;
+    font-size:13px;
+    color:#5b6776;
+    line-height:1.35;
+  }
+  .companySub .k{color:#8a94a6;font-weight:600}
+
+  /* UPDATED: arrow ↗︎ instead of eye */
+  .companyViewBtn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:6px;
+    background:transparent;
+    border:0;
+    padding:0;
+    cursor:pointer;
+    color:var(--accent);
+    font-size:13px;
+    font-weight:600;
+    line-height:1;
+    white-space:nowrap;
+    
+  }
+
+
+  /* NEW: action icons row (call/text/email) like screenshot */
+  .actionRow{
+    margin:10px 0 12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:26px;
+  }
+  .actionBtn{
+    width:42px;height:42px;border-radius:999px;
+    border:2px solid rgba(44,125,191,.35);
+    display:grid;place-items:center;
+    color:var(--accent);
+    background:#fff;
+    cursor:pointer;
+    box-shadow:0 6px 16px rgba(15,45,86,.06);
+  }
+  .actionBtn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+  /* NEW: detail field grid for clean scanning */
+  .fieldCard{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:14px;
+    box-shadow:0 8px 22px rgba(15,45,86,.08);
+    margin:12px 0;
+  }
+  .fieldTitle{
+    font-weight:600; /* toned down */
+    color:#111;
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:10px;
+  }
+  .fieldTitle .dot{
+    width:9px;height:9px;border-radius:999px;background:var(--accent);
+    opacity:.85;
+  }
+  .kvGrid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+
+  /* UPDATED: each kv row becomes clickable like edit */
+  .kv{
+    display:grid;
+    grid-template-columns:120px 1fr;
+    gap:12px;
+    align-items:start;
+    font-size:13px;
+    padding:6px 0;
+    cursor:pointer;
+  }
+
+  .kv:active{
+    opacity:.65;
+  }
+
+
+   .k{
+    color:#8a94a6;
+    font-weight:400;
+    letter-spacing:.2px;
+    text-transform:none;
+  }
+
+   .v{
+    color:#111;
+    font-weight:400; /* toned down */
+    line-height:1.35;
+    word-break:break-word;
+  }
+
+  .mutedV{color:#5b6776;font-weight:500}
+
+  /* NEW: views list (pills like screenshot) */
+  .pill{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:18px 12px;
+    margin:14px 0;
+    text-align:center;
+    font-weight:600;
+    color:#111;
+    box-shadow:0 8px 22px rgba(15,45,86,.08);
+    cursor:pointer;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="phone">
+    <div class="notch"></div>
+
+    <!-- Screen stack -->
+    <div class="screens" id="screens">
+
+      <!-- Screen 1: Time Logs list -->
+      <div class="screen" id="screen-list">
+        <div class="topbar">
+          <div class="title">Time Logs</div>
+          <div class="plus" onclick="demoPlus()">
+            <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          </div>
+        </div>
+
+        <div class="searchRow">
+          <div class="search">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input id="q" placeholder="Search" />
+          </div>
+          <div class="hamburger" onclick="openViews()">
+            <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          </div>
+        </div>
+
+        <div class="content">
+          <div id="list"></div>
+        </div>
+      </div>
+
+      <!-- Screen 2: Time Log details -->
+      <div class="screen off-right hidden" id="screen-details" aria-hidden="true">
+        <div class="detailsHead">
+          <div class="back" onclick="navBack()">
+            <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+          </div>
+          <div class="detailsTitleCentered">Time Log Details</div>
+        </div>
+
+        <div class="detailsBody" id="detailsBody"></div>
+      </div>
+
+      <!-- NEW Screen 3: Time Log Views -->
+      <div class="screen off-right hidden" id="screen-views" aria-hidden="true">
+        <div class="topbar">
+          <div class="backBtn" onclick="closeViews()">
+            <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+          </div>
+          <div class="title">Time Log Views</div>
+          <div class="plus" onclick="demoViewsPlus()">
+            <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          </div>
+        </div>
+
+        <div class="searchRow">
+  <div class="search">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    <input id="viewSearch" placeholder="Search" />
+  </div>
+</div>
+
+
+        <div class="content" style="padding-top:4px;">
+          <div id="viewsList"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- bottom tabs (same as screenshot) -->
+    <div class="tabs" id="tabs">
+      <div class="tab">
+        <svg viewBox="0 0 24 24"><path d="M3 10.5l9-7 9 7"/><path d="M9 22V12h6v10"/></svg>
+        Home
+      </div>
+      <div class="tab">
+        <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 3-1.34 3-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3z"/><path d="M8 11c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3z"/><path d="M8 13c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13z"/><path d="M16 13c-.29 0-.62.02-1 .05 1.16.84 2 1.94 2 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+        Contacts
+      </div>
+      <div class="tab">
+        <svg viewBox="0 0 24 24"><path d="M4 6h16v14H4z"/><path d="M8 2v4M16 2v4"/><path d="M7 10h10M7 14h10"/></svg>
+        My Card
+      </div>
+      <div class="tab">
+        <svg viewBox="0 0 24 24"><path d="M4 4h6v6H4z"/><path d="M14 4h6v6h-6z"/><path d="M4 14h6v6H4z"/><path d="M14 14h6v6h-6z"/></svg>
+        Scan Card
+      </div>
+      <div class="tab">
+        <svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>
+        More
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ---------- Time log data (from your prompt) ---------- */
+const TIME_LOGS = [
+  {
+    total: "0 hours, 18 minutes",
+    company: "Business Law Group",
+    project: "Miscellaneous Legal Work",
+    task: "Make Phone Call",
+    comments: "Phone calls with Bobby and Angie re billing issues with Segwik and Precision Roofing",
+    user: "Jessica Cahoon",
+    id: "6966a11f33f73f2fcb0b6512"
+  },
+  {
+    total: "0 hours, 24 minutes",
+    company: "Monson Janitorial Services, Inc.",
+    project: "Miscellaneous Legal Work",
+    task: "Write Email",
+    comments: "Email Don a draft to review for an email with James including rewrites of 2 sections of the purchase agreement.",
+    user: "Jessica Cahoon",
+    id: "6966a05a556808f71206a384"
+  },
+  {
+    total: "0 hours, 18 minutes",
+    company: "CorVive",
+    project: "Miscellaneous Legal Work",
+    task: "Review Agreement",
+    comments: "Compile signatures into file and email with instructions to Plaintiff's attorney.",
+    user: "Jessica Cahoon",
+    id: "69669f6bc1667006d40d9df5"
+  },
+  {
+    total: "0 hours, 6 minutes",
+    company: "Pure Gen Holdings, Inc.",
+    project: "Miscellaneous Legal Work",
+    task: "Make Phone Call",
+    comments: "Follow up call from Laurie re terminated employee and needing to handle softly. Decided not to pursue cease and desist letter unless terminated employee continues behavior.",
+    user: "Jessica Cahoon",
+    id: "69669f4281bd973e15029cb5"
+  },
+  {
+    total: "1 hours, 0 minutes",
+    company: "CorVive",
+    project: "Miscellaneous Legal Work",
+    task: "Conduct Discovery",
+    comments: "Review and make notes on Nicole Han deposition transcript",
+    user: "George Brunt",
+    id: "69650641dd07b6f2b708ccd2"
+  },
+  {
+    total: "0 hours, 24 minutes",
+    company: "Monson Janitorial Services, Inc.",
+    project: "Miscellaneous Legal Work",
+    task: "Draft Agreement",
+    comments: "Review updated employment agreements. Update promissory notes. Email Don regarding the same.",
+    user: "Jessica Cahoon",
+    id: "69615cd215cf84564b0bc3f3"
+  },
+  {
+    total: "0 hours, 30 minutes",
+    company: "Relive the Magic at Home",
+    project: "Miscellaneous Legal Work",
+    task: "Draft Pleadings",
+    comments: "Review Final and File",
+    user: "George Brunt",
+    id: "696117e50a37f50c55086544"
+  },
+  {
+    total: "0 hours, 12 minutes",
+    company: "Relive the Magic at Home",
+    project: "Miscellaneous Legal Work",
+    task: "Conduct Investigation",
+    comments: "Opposition to Wicks proposed registration",
+    user: "George Brunt",
+    id: "696117b8f39d42f0e70ee822"
+  },
+  {
+    total: "1 hours, 18 minutes",
+    company: "CorVive",
+    project: "Miscellaneous Legal Work",
+    task: "Conduct Research",
+    comments: "Research class action suit",
+    user: "George Brunt",
+    id: "6960058c74ef3e89a50e7d34"
+  }
+];
+
+/* ---------- NEW: Views data (from your prompt) ---------- */
+const TIME_LOG_VIEWS = [
+  { name: "Lindsay Germann", tag: "This Month" },
+  { name: "Jessica Cahoon", tag: "This Month" },
+  { name: "Stephanie Griffey", tag: "This Month" },
+  { name: "Stephanie Keller", tag: "Last Month" },
+  { name: "George Brunt", tag: "This Month" },
+  { name: "Joseph Wadsworth", tag: "Last Month" },
+  { name: "Lawrence Tuttle", tag: "Last Month" },
+  { name: "Todd Pingel", tag: "Billing" },
+  { name: "All Logged Time", tag: "This Month" },
+  { name: "Paul Ivy", tag: "This Month" },
+  { name: "Finalizing Monthly Invoices", tag: "" },
+  { name: "Last Month’s Work by Attorney", tag: "" }
+];
+
+/* ---------- Helpers ---------- */
+function compactTime(str){
+  // "0 hours, 18 minutes" -> "0h 18m"
+  const h = (str.match(/(\d+)\s*hours?/)||[])[1] || "0";
+  const m = (str.match(/(\d+)\s*minutes?/)||[])[1] || "0";
+  return `${h}h ${m}m`;
+}
+function initialsFromCompany(company){
+  const parts = String(company||'').replace(/[^a-zA-Z0-9 ]/g,'').trim().split(/\s+/).slice(0,2);
+  if(!parts.length) return "TL";
+  return parts.map(p=>p[0].toUpperCase()).join('');
+}
+
+/* NEW: attorney headshot map */
+function attorneyPhotoUrl(user){
+  const u = String(user||"").toLowerCase();
+  if(u.includes("jessica")) return "https://d34hmiuaex7c0.cloudfront.net/5052/uploads/profile/staffuser/5060/1666032537644.jpg";
+  if(u.includes("george")) return "https://d34hmiuaex7c0.cloudfront.net/5052/uploads/profile/staffuser/5054/1665766283321.jpeg";
+  return "";
+}
+
+/* ---------- Render list ---------- */
+const listEl = document.getElementById('list');
+
+function rowHTML(item, idx){
+  const t = compactTime(item.total);
+  const photo = attorneyPhotoUrl(item.user);
+  return `
+    <div class="row" data-idx="${idx}">
+      <div class="avatar">
+        ${photo ? `<img src="${photo}" alt="${escapeHtml(item.user)}" />` : `${initialsFromCompany(item.company)}`}
+      </div>
+
+      <div class="meta">
+        <div class="line1">
+          <span class="t">${t}</span>
+          <span class="dot">·</span>
+          <span>${item.company}</span>
+        </div>
+        <div class="line2">${item.task} · ${item.project}</div>
+      </div>
+
+      <div class="chev">
+        <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+    </div>
+  `;
+}
+
+function renderList(filter=""){
+  const q = (filter||"").trim().toLowerCase();
+  const rows = TIME_LOGS
+    .map((x,i)=>({x,i}))
+    .filter(({x})=>{
+      if(!q) return true;
+      const hay = `${x.total} ${x.company} ${x.project} ${x.task} ${x.comments} ${x.user} ${x.id}`.toLowerCase();
+      return hay.includes(q);
+    });
+
+  listEl.innerHTML = rows.map(({x,i})=>rowHTML(x,i)).join('');
+
+  // bind click
+  listEl.querySelectorAll('.row').forEach(r=>{
+    r.addEventListener('click', ()=>{
+      const idx = parseInt(r.getAttribute('data-idx'),10);
+      openDetails(idx);
+    });
+  });
+}
+
+document.getElementById('q').addEventListener('input', (e)=>renderList(e.target.value));
+
+/* ---------- Navigation ---------- */
+const screenList = document.getElementById('screen-list');
+const screenDetails = document.getElementById('screen-details');
+const screenViews = document.getElementById('screen-views');
+const tabsEl = document.getElementById('tabs');
+
+function navToDetails(){
+  screenDetails.classList.remove('hidden');
+  screenDetails.classList.add('off-right');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    screenList.classList.add('off-left');
+    screenDetails.classList.remove('off-right');
+  }));
+  setTimeout(()=>{
+    screenList.classList.add('hidden');
+    screenList.classList.remove('off-left');
+  }, 360);
+}
+
+function navBack(){
+  screenList.classList.remove('hidden');
+  screenList.classList.remove('off-left','off-right');
+
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    screenDetails.classList.add('off-right');
+  }));
+
+  setTimeout(()=>{
+    screenDetails.classList.add('hidden');
+    screenDetails.classList.remove('off-right');
+  }, 360);
+}
+
+/* ---------- NEW: Views navigation (hamburger) ---------- */
+function openViews(){
+  renderViews("");
+
+  tabsEl.classList.add('hidden');
+
+  screenViews.classList.remove('hidden');
+  screenViews.classList.add('off-right');
+
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    screenList.classList.add('off-left');
+    screenViews.classList.remove('off-right');
+  }));
+
+  setTimeout(()=>{
+    screenList.classList.add('hidden');
+    screenList.classList.remove('off-left');
+  }, 360);
+}
+
+function closeViews(){
+  screenList.classList.remove('hidden');
+  screenList.classList.remove('off-left','off-right');
+
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    screenViews.classList.add('off-right');
+  }));
+
+  setTimeout(()=>{
+    screenViews.classList.add('hidden');
+    screenViews.classList.remove('off-right');
+    tabsEl.classList.remove('hidden');
+  }, 360);
+}
+
+/* ---------- NEW: Views render + search ---------- */
+const viewsListEl = document.getElementById('viewsList');
+const viewSearchEl = document.getElementById('viewSearch');
+
+function renderViews(filter=""){
+  const q = (filter||"").trim().toLowerCase();
+  const rows = TIME_LOG_VIEWS.filter(v=>{
+    if(!q) return true;
+    const hay = `${v.name} ${v.tag}`.toLowerCase();
+    return hay.includes(q);
+  });
+
+  viewsListEl.innerHTML = rows.map(v=>{
+    const label = v.tag ? `${v.name} — ${v.tag}` : v.name;
+    return `<div class="pill" onclick="pickView('${escapeAttr(label)}')">${label}</div>`;
+  }).join('');
+}
+
+viewSearchEl.addEventListener('input', (e)=>renderViews(e.target.value));
+
+function escapeAttr(s){
+  return String(s||"").replaceAll("'", "\\'").replaceAll('"', '&quot;');
+}
+
+/* ---------- Details ---------- */
+function openDetails(idx){
+  const x = TIME_LOGS[idx];
+  if(!x) return;
+
+  // Dummy additional fields (requested)
+  const companyId = "2790715";
+  const createdAt = "01/08/2026 2:22 PM";
+  const startTime = "12/22/2026 2:21 PM";
+  const billable = (idx % 2 === 0) ? "Yes" : "No";
+  const billingMethod = (billable === "Yes") ? ((idx % 3 === 0) ? "Hourly" : "Credits") : "—";
+  const hourlyRate = 500;
+  const hourlyAmount = "$50";
+  const billableHours = "0.10 hrs";
+  const billableAmount = "$50";
+  const creditsUsed = "0.2 credits";
+
+  document.getElementById('detailsBody').innerHTML = `
+  <!-- Company details card (mimic contact details section) -->
+  <div class="companyCard">
+    <div class="companyMeta">
+      <div class="companyName">${x.company}</div>
+      <div class="companySub">
+        <span class="k">Company ID:</span> <span style="font-weight:500;color:#111">${companyId}</span>
+      </div>
+    </div>
+
+    <div class="companyViewBtn" onclick="viewCompany('${escapeAttr(x.company)}','${companyId}')"
+      title="View Company">View Company ↗︎</div>
+  </div>
+
+  <!-- icons row (only call, text, email) -->
+  <div class="actionRow">
+    <div class="actionBtn" onclick="actionCall()" title="Call">
+      <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.08 4.18 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.86.31 1.7.57 2.5a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.58-1.09a2 2 0 0 1 2.11-.45c.8.26 1.64.45 2.5.57A2 2 0 0 1 22 16.92z"/></svg>
+    </div>
+    <div class="actionBtn" onclick="actionText()" title="Text">
+      <svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
+    </div>
+    <div class="actionBtn" onclick="actionEmail()" title="Email">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
+    </div>
+  </div>
+
+  <!-- Time summary -->
+  <div class="fieldCard">
+    <div class="fieldTitle"><span class="dot"></span> Time Log Summary</div>
+    <div class="kvGrid">
+
+      <div class="kv" onclick="editField('Total Time Logged','${escapeAttr(x.total)}', this)">
+        <div class="k">Total Time</div>
+        <div class="v">${x.total}</div>
+      </div>
+
+      <div class="kv" onclick="editField('Created At','${escapeAttr(createdAt)}', this)">
+        <div class="k">Created At</div>
+        <div class="v">${createdAt}</div>
+      </div>
+
+      <div class="kv" onclick="editField('Start Time','${escapeAttr(startTime)}', this)">
+        <div class="k">Start Time</div>
+        <div class="v">${startTime}</div>
+      </div>
+
+      <div class="kv" onclick="editField('Task','${escapeAttr(x.task)}', this)">
+        <div class="k">Task</div>
+        <div class="v">${x.task}</div>
+      </div>
+
+      <div class="kv" onclick="editField('Project','${escapeAttr(x.project)}', this)">
+        <div class="k">Project</div>
+        <div class="v">${x.project}</div>
+      </div>
+
+      <div class="kv" onclick="editField('Logged By','${escapeAttr(x.user)}', this)">
+        <div class="k">Logged By</div>
+        <div class="v">${x.user}</div>
+      </div>
+
+      <div class="kv" onclick="editField('Time Log ID','${escapeAttr(x.id)}', this)">
+        <div class="k">Time Log ID</div>
+        <div class="v" style="color:#6b7280;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:12px">${x.id}</div>
+      </div>
+
+      <div class="kv" onclick="editField('Comments','${escapeAttr(x.comments)}', this)">
+        <div class="k">Comments</div>
+        <div class="v" style="color:#5b6776">${escapeHtml(x.comments)}</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Billing -->
+  <div class="fieldCard">
+    <div class="fieldTitle"><span class="dot"></span> Billing</div>
+    <div class="kvGrid">
+
+      <div class="kv" onclick="editField('Billable','${escapeAttr(billable)}', this)">
+        <div class="k">Billable</div>
+        <div class="v">${billable}</div>
+      </div>
+
+      <div class="kv" onclick="editField('Hourly Rate','${escapeAttr(billable === "Yes" ? `$${hourlyRate}/hr` : "—")}', this)">
+        <div class="k">Hourly Rate</div>
+        <div class="v">${billable === "Yes" ? `$${hourlyRate}/hr` : `<span class="mutedV">—</span>`}</div>
+      </div>
+
+      <div class="kv" onclick="editField('Hourly Amount','${escapeAttr(billable === "Yes" ? hourlyAmount : "—")}', this)">
+        <div class="k">Hourly Amount</div>
+        <div class="v">${billable === "Yes" ? hourlyAmount : `<span class="mutedV">—</span>`}</div>
+      </div>
+
+      <div class="kv" onclick="editField('Billable Hours','${escapeAttr(billable === "Yes" ? billableHours : "—")}', this)">
+        <div class="k">Billable Hours</div>
+        <div class="v">${billable === "Yes" ? billableHours : `<span class="mutedV">—</span>`}</div>
+      </div>
+
+      <div class="kv" onclick="editField('Billable Amount','${escapeAttr(billable === "Yes" ? billableAmount : "—")}', this)">
+        <div class="k">Billable Amount</div>
+        <div class="v">${billable === "Yes" ? billableAmount : `<span class="mutedV">—</span>`}</div>
+      </div>
+
+      <div class="kv" onclick="editField('Credits Used','${escapeAttr(billable === "Yes" ? creditsUsed : "0 credits")}', this)">
+        <div class="k">Credits Used</div>
+        <div class="v">${billable === "Yes" ? creditsUsed : `<span class="mutedV">0 credits</span>`}</div>
+      </div>
+
+    </div>
+  </div>
+`;
+
+
+  navToDetails();
+}
+
+function escapeHtml(str){
+  return String(str||'')
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;');
+}
+
+/* NEW: inline edit UX (tap -> textbox) */
+function editField(label, currentValue, el){
+  if(!el) return;
+
+  // prevent double-activating if already editing
+  if(el.getAttribute("data-editing") === "1") return;
+  el.setAttribute("data-editing","1");
+
+  const vEl = el.querySelector(".v");
+  if(!vEl){
+    el.setAttribute("data-editing","0");
+    return;
+  }
+
+  const originalText = String(currentValue ?? "").trim();
+  const isComments = label.toLowerCase().includes("comment");
+
+  // build input control
+  const input = document.createElement(isComments ? "textarea" : "input");
+  input.value = originalText;
+
+  // style input like native mobile field
+  input.style.width = "100%";
+  input.style.border = "1px solid var(--line)";
+  input.style.borderRadius = "10px";
+  input.style.padding = "10px 12px";
+  input.style.fontSize = "13px";
+  input.style.fontFamily = "inherit";
+  input.style.color = "var(--ink)";
+  input.style.outline = "none";
+  input.style.background = "#fff";
+
+  if(isComments){
+    input.style.minHeight = "78px";
+    input.style.resize = "none";
+  } else {
+    input.type = "text";
+  }
+
+  // clear value node + insert input
+  vEl.innerHTML = "";
+  vEl.appendChild(input);
+
+  // focus cursor end
+  setTimeout(()=>{
+    input.focus();
+    if(input.setSelectionRange && !isComments){
+      const len = input.value.length;
+      input.setSelectionRange(len,len);
+    }
+  }, 0);
+
+  function commit(){
+    const newVal = input.value.trim() || "—";
+    vEl.textContent = newVal;
+
+    el.setAttribute("data-editing","0");
+
+    // demo: show saved
+    // console.log("Saved", label, newVal);
+  }
+
+  input.addEventListener("blur", commit);
+
+  // Enter to save (input only)
+  input.addEventListener("keydown", (e)=>{
+    if(!isComments && e.key === "Enter"){
+      e.preventDefault();
+      input.blur();
+    }
+  });
+}
+
+
+
+/* ---------- Demo buttons ---------- */
+function demoPlus(){ alert("Plus tapped — create new Time Log / manual entry."); }
+function demoViewsPlus(){ alert("Plus tapped — create a new Time Log View."); }
+
+/* Init */
+renderList();
+renderViews();
+</script>
+</body>
+</html>
+
