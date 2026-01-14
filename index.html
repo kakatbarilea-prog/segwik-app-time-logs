@@ -1193,41 +1193,49 @@ function openDetails(idx){
     <div class="fieldTitle"><span class="dot"></span> Time Log Summary</div>
     <div class="kvGrid">
 
+      <!-- ✅ Editable -->
       <div class="kv" onclick="editField('Total Time Logged','${escapeAttr(x.total)}', this)">
         <div class="k">Total Time</div>
         <div class="v">${x.total}</div>
       </div>
 
-      <div class="kv" onclick="editField('Created At','${escapeAttr(createdAt)}', this)">
+      <!-- ❌ Not Editable -->
+      <div class="kv">
         <div class="k">Created At</div>
         <div class="v">${createdAt}</div>
       </div>
 
+      <!-- ✅ Editable -->
       <div class="kv" onclick="editField('Start Time','${escapeAttr(startTime)}', this)">
         <div class="k">Start Time</div>
         <div class="v">${startTime}</div>
       </div>
 
-      <div class="kv" onclick="editField('Task','${escapeAttr(x.task)}', this)">
+      <!-- ❌ Not Editable -->
+      <div class="kv">
         <div class="k">Task</div>
         <div class="v">${x.task}</div>
       </div>
 
-      <div class="kv" onclick="editField('Project','${escapeAttr(x.project)}', this)">
+      <!-- ❌ Not Editable -->
+      <div class="kv">
         <div class="k">Project</div>
         <div class="v">${x.project}</div>
       </div>
 
-      <div class="kv" onclick="editField('Logged By','${escapeAttr(x.user)}', this)">
+      <!-- ❌ Not Editable -->
+      <div class="kv">
         <div class="k">Logged By</div>
         <div class="v">${x.user}</div>
       </div>
 
-      <div class="kv" onclick="editField('Time Log ID','${escapeAttr(x.id)}', this)">
+      <!-- ❌ Not Editable -->
+      <div class="kv">
         <div class="k">Time Log ID</div>
         <div class="v" style="color:#6b7280;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:12px">${x.id}</div>
       </div>
 
+      <!-- ✅ Editable -->
       <div class="kv" onclick="editField('Comments','${escapeAttr(x.comments)}', this)">
         <div class="k">Comments</div>
         <div class="v" style="color:#5b6776">${escapeHtml(x.comments)}</div>
@@ -1236,7 +1244,7 @@ function openDetails(idx){
     </div>
   </div>
 
-  <!-- Billing -->
+  <!-- Billing (✅ ALL Editable) -->
   <div class="fieldCard">
     <div class="fieldTitle"><span class="dot"></span> Billing</div>
     <div class="kvGrid">
