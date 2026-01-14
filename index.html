@@ -445,6 +445,96 @@
     box-shadow:0 8px 22px rgba(15,45,86,.08);
     cursor:pointer;
   }
+
+/* ---------- Add Time Log form ---------- */
+.formCard{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  box-shadow:0 8px 22px rgba(15,45,86,.08);
+  padding:14px;
+  margin:12px 0;
+}
+
+.formLabel{
+  font-size:12px;
+  font-weight:500;
+  color:#64748b;
+  margin:12px 0 6px;
+}
+
+.formInput, .formSelect, .formTextarea{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:12px 12px;
+  font-size:14px;
+  background:#fff;
+  outline:none;
+}
+
+.formTextarea{
+  min-height:90px;
+  resize:none;
+}
+
+.formRow2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.radioRow{
+  display:flex;
+  gap:14px;
+  align-items:center;
+  padding:10px 0 0;
+}
+
+.radioPill{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  cursor:pointer;
+  user-select:none;
+}
+
+.radioPill input{accent-color:var(--accent)}
+
+.sectionHead{
+  font-weight:500;
+  color:#111;
+  font-size:14px;
+  margin:6px 0 10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.sectionHead .dot{
+  width:9px;height:9px;border-radius:999px;background:var(--accent);opacity:.85;
+}
+
+.primaryBtn{
+  width:100%;
+  padding:14px 14px;
+  border-radius:14px;
+  border:0;
+  background:var(--accent);
+  color:#fff;
+  font-weight:500;
+  font-size:15px;
+  cursor:pointer;
+  box-shadow:0 10px 22px rgba(44,125,191,.22);
+  margin-top:14px;
+}
+
+.primaryBtn:active{opacity:.8}
+
+
 </style>
 </head>
 <body>
@@ -459,7 +549,8 @@
       <div class="screen" id="screen-list">
         <div class="topbar">
           <div class="title">Time Logs</div>
-          <div class="plus" onclick="demoPlus()">
+          <div class="plus" onclick="openAddTimeLog()">
+
             <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
           </div>
         </div>
@@ -513,6 +604,77 @@
 
         <div class="content" style="padding-top:4px;">
           <div id="viewsList"></div>
+        </div>
+      </div>
+      <!-- NEW Screen 4: Add Time Log -->
+      <div class="screen off-right hidden" id="screen-add" aria-hidden="true">
+        <div class="topbar">
+          <div class="backBtn" onclick="closeAddTimeLog()">
+            <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+          </div>
+          <div class="title">Add Time Log</div>
+        </div>
+
+        <div class="content" style="padding-top:12px;">
+          <div class="formCard">
+
+            <div class="formLabel">Company</div>
+            <select id="addCompany" class="formSelect"></select>
+
+            <div class="formLabel">Project</div>
+            <select id="addProject" class="formSelect"></select>
+
+            <div class="formLabel">Task</div>
+            <select id="addTask" class="formSelect"></select>
+
+            <div class="formLabel">User</div>
+            <select id="addUser" class="formSelect"></select>
+
+          </div>
+
+          <div class="formCard">
+            <div class="sectionHead"><span class="dot"></span> Time Tracking</div>
+
+            <div class="formLabel">Start Time</div>
+            <input id="addStartTime" type="datetime-local" class="formInput" />
+
+            <div class="formRow2">
+              <div>
+                <div class="formLabel">Hours</div>
+                <input id="addHours" type="number" min="0" value="0" class="formInput" />
+              </div>
+              <div>
+                <div class="formLabel">Minutes</div>
+                <input id="addMinutes" type="number" min="0" max="59" value="0" class="formInput" />
+              </div>
+            </div>
+          </div>
+
+          <div class="formCard">
+            <div class="formLabel">Billable</div>
+
+            <div class="radioRow">
+              <label class="radioPill">
+                <input type="radio" name="addBillable" value="Yes" checked />
+                Yes
+              </label>
+              <label class="radioPill">
+                <input type="radio" name="addBillable" value="No" />
+                No
+              </label>
+            </div>
+
+            <div id="hourlyRateWrap">
+              <div class="formLabel">Hourly Rate</div>
+              <input id="addHourlyRate" type="number" min="0" value="500" class="formInput" />
+            </div>
+
+            <div class="formLabel">Comments</div>
+            <textarea id="addComments" class="formTextarea" placeholder="Add comments..."></textarea>
+
+            <button class="primaryBtn" onclick="submitNewTimeLog()">Submit Time Log</button>
+          </div>
+
         </div>
       </div>
 
@@ -630,6 +792,39 @@ const TIME_LOGS = [
     id: "6960058c74ef3e89a50e7d34"
   }
 ];
+/* ---------- Add Time Log dropdown options ---------- */
+const COMPANY_OPTIONS = [
+  "Business Law Group",
+  "Monson Janitorial Services, Inc.",
+  "CorVive",
+  "Pure Gen Holdings, Inc.",
+  "Relive the Magic at Home"
+];
+
+const PROJECT_OPTIONS = [
+  "Miscellaneous Legal Work",
+  "Contract Review",
+  "Litigation Support",
+  "Employment Matters",
+  "Trademark / IP"
+];
+
+const TASK_OPTIONS = [
+  "Make Phone Call",
+  "Write Email",
+  "Review Agreement",
+  "Draft Agreement",
+  "Conduct Research",
+  "Conduct Discovery"
+];
+
+const USER_OPTIONS = [
+  "Jessica Cahoon",
+  "George Brunt",
+  "Lindsay Germann",
+  "Stephanie Griffey",
+  "Joseph Wadsworth"
+];
 
 /* ---------- NEW: Views data (from your prompt) ---------- */
 const TIME_LOG_VIEWS = [
@@ -723,6 +918,7 @@ document.getElementById('q').addEventListener('input', (e)=>renderList(e.target.
 const screenList = document.getElementById('screen-list');
 const screenDetails = document.getElementById('screen-details');
 const screenViews = document.getElementById('screen-views');
+const screenAdd = document.getElementById('screen-add');
 const tabsEl = document.getElementById('tabs');
 
 function navToDetails(){
@@ -786,6 +982,40 @@ function closeViews(){
     tabsEl.classList.remove('hidden');
   }, 360);
 }
+/* ---------- NEW: Add Time Log navigation ---------- */
+function openAddTimeLog(){
+  initAddForm();
+
+  tabsEl.classList.add('hidden');
+
+  screenAdd.classList.remove('hidden');
+  screenAdd.classList.add('off-right');
+
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    screenList.classList.add('off-left');
+    screenAdd.classList.remove('off-right');
+  }));
+
+  setTimeout(()=>{
+    screenList.classList.add('hidden');
+    screenList.classList.remove('off-left');
+  }, 360);
+}
+
+function closeAddTimeLog(){
+  screenList.classList.remove('hidden');
+  screenList.classList.remove('off-left','off-right');
+
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    screenAdd.classList.add('off-right');
+  }));
+
+  setTimeout(()=>{
+    screenAdd.classList.add('hidden');
+    screenAdd.classList.remove('off-right');
+    tabsEl.classList.remove('hidden');
+  }, 360);
+}
 
 /* ---------- NEW: Views render + search ---------- */
 const viewsListEl = document.getElementById('viewsList');
@@ -809,6 +1039,109 @@ viewSearchEl.addEventListener('input', (e)=>renderViews(e.target.value));
 
 function escapeAttr(s){
   return String(s||"").replaceAll("'", "\\'").replaceAll('"', '&quot;');
+}
+/* ---------- NEW: Add Time Log behavior ---------- */
+function fillSelect(selectEl, options, placeholder){
+  selectEl.innerHTML = '';
+  if(placeholder){
+    const o = document.createElement('option');
+    o.value = '';
+    o.textContent = placeholder;
+    o.disabled = true;
+    o.selected = true;
+    selectEl.appendChild(o);
+  }
+  options.forEach(v=>{
+    const opt = document.createElement('option');
+    opt.value = v;
+    opt.textContent = v;
+    selectEl.appendChild(opt);
+  });
+}
+
+function initAddForm(){
+  // Fill dropdowns
+  fillSelect(document.getElementById('addCompany'), COMPANY_OPTIONS, "Select Company...");
+  fillSelect(document.getElementById('addProject'), PROJECT_OPTIONS, "Select Project...");
+  fillSelect(document.getElementById('addTask'), TASK_OPTIONS, "Select Task...");
+  fillSelect(document.getElementById('addUser'), USER_OPTIONS, "Select User...");
+
+  // Default start time = now (local)
+  const now = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  const local = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  document.getElementById('addStartTime').value = local;
+
+  // Default durations
+  document.getElementById('addHours').value = 0;
+  document.getElementById('addMinutes').value = 0;
+
+  // Default billable Yes
+  document.querySelectorAll('input[name="addBillable"]').forEach(r=>{
+    r.checked = (r.value === "Yes");
+  });
+  document.getElementById('hourlyRateWrap').style.display = "block";
+
+  // Toggle billable => hourly rate
+  document.querySelectorAll('input[name="addBillable"]').forEach(r=>{
+    r.onchange = ()=>{
+      const billable = document.querySelector('input[name="addBillable"]:checked')?.value || "Yes";
+      document.getElementById('hourlyRateWrap').style.display = (billable === "Yes") ? "block" : "none";
+    };
+  });
+
+  // reset comments
+  document.getElementById('addComments').value = "";
+}
+
+function submitNewTimeLog(){
+  const company = document.getElementById('addCompany').value;
+  const project = document.getElementById('addProject').value;
+  const task = document.getElementById('addTask').value;
+  const user = document.getElementById('addUser').value;
+
+  const startTime = document.getElementById('addStartTime').value;
+  const hours = parseInt(document.getElementById('addHours').value || "0", 10);
+  const minutes = parseInt(document.getElementById('addMinutes').value || "0", 10);
+  const comments = document.getElementById('addComments').value || "";
+
+  const billable = document.querySelector('input[name="addBillable"]:checked')?.value || "Yes";
+  const hourlyRate = parseFloat(document.getElementById('addHourlyRate').value || "0");
+
+  // Basic validation
+  if(!company || !project || !task || !user){
+    alert("Please select Company, Project, Task, and User.");
+    return;
+  }
+
+  const safeMinutes = Math.max(0, Math.min(59, minutes));
+  const totalLabel = `${hours} hours, ${safeMinutes} minutes`;
+
+  // Create new log
+  const newLog = {
+    total: totalLabel,
+    company,
+    project,
+    task,
+    comments,
+    user,
+    id: "new_" + Math.random().toString(16).slice(2)
+  };
+
+  // Add to top of list
+  TIME_LOGS.unshift(newLog);
+
+  // Refresh list + close screen
+  renderList(document.getElementById('q').value || "");
+  closeAddTimeLog();
+
+  // Optional: open details instantly
+  // openDetails(0);
+
+  // Demo: show values (remove if you want silent)
+  console.log("Submitted Time Log:", {
+    company, project, task, user, startTime, hours, minutes: safeMinutes, billable, hourlyRate, comments
+  });
 }
 
 /* ---------- Details ---------- */
@@ -1029,7 +1362,6 @@ function editField(label, currentValue, el){
 
 
 /* ---------- Demo buttons ---------- */
-function demoPlus(){ alert("Plus tapped — create new Time Log / manual entry."); }
 function demoViewsPlus(){ alert("Plus tapped — create a new Time Log View."); }
 
 /* Init */
