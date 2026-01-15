@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -573,6 +573,263 @@
     margin-top:14px;
   }
   .primaryBtn:active{opacity:.8}
+
+  /* =========================
+     NEW: Stepper UI for Add Log
+     ========================= */
+  .stepWrap{
+    flex:1;
+    overflow:auto;
+    background:var(--bg);
+    padding:10px 10px calc(var(--footer-h) + 10px);
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+    overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+  .stepWrap::-webkit-scrollbar{width:0;height:0;display:none;}
+
+  .step{
+    display:none;
+    min-height:calc(var(--phone-h) - var(--head-h) - 40px);
+  }
+  .step.active{display:block;}
+
+  .stepCentered{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    min-height:calc(var(--phone-h) - var(--head-h) - 140px);
+  }
+
+  /* NEW: when you want top-aligned (not centered) */
+  .stepTopAligned{
+    justify-content:flex-start;
+    padding-top:0;
+  }
+
+  .stepActions{
+    position:sticky;
+    bottom:0;
+    background:linear-gradient(to top, rgba(246,248,251,1), rgba(246,248,251,.92), rgba(246,248,251,0));
+    padding:12px 0 6px;
+    margin-top:10px;
+  }
+
+  .secondaryBtn{
+    width:100%;
+    padding:13px 14px;
+    border-radius:14px;
+    border:1px solid var(--line);
+    background:#fff;
+    color:#111;
+    font-weight:700;
+    font-size:15px;
+    cursor:pointer;
+    box-shadow:0 8px 18px rgba(15,45,86,.06);
+    margin-top:10px;
+  }
+  .secondaryBtn:active{opacity:.85}
+
+  .microHint{
+    font-size:12px;
+    color:#6b7280;
+    text-align:center;
+    margin-top:8px;
+    line-height:1.35;
+  }
+
+  .miniStepTitle{
+    font-weight:700;
+    font-size:14px;
+    color:#111;
+    margin:6px 0 10px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .miniStepTitle .dot{
+    width:9px;height:9px;border-radius:999px;background:var(--accent);opacity:.85;
+  }
+
+  /* attachments strip (optional end) */
+  .attachStrip{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    border:1px dashed rgba(44,125,191,.35);
+    background:rgba(44,125,191,.06);
+    border-radius:16px;
+    padding:12px 12px;
+    cursor:pointer;
+  }
+  .attachStrip .left{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-width:0;
+  }
+  .paperclip{
+    width:34px;height:34px;border-radius:12px;
+    border:1px solid rgba(44,125,191,.25);
+    display:grid;place-items:center;
+    color:var(--accent);
+    background:#fff;
+    flex:0 0 auto;
+  }
+  .paperclip svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .attachText{min-width:0}
+  .attachTitle{font-weight:700;color:#0b1b2b;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .attachSub{margin-top:2px;font-size:12px;color:#5b6776;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  /* NEW: Attachments list + loader */
+  .fileInputHidden{display:none;}
+  .attachList{
+    margin-top:12px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .fileRow{
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:#fff;
+    padding:10px 10px;
+    box-shadow:0 6px 14px rgba(15,45,86,.05);
+  }
+  .fileTop{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .fileMeta{
+    min-width:0;
+  }
+  .fileName{
+    font-weight:700;
+    font-size:13px;
+    color:#111;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .fileSub{
+    margin-top:2px;
+    font-size:12px;
+    color:#6b7280;
+  }
+  .fileRight{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex:0 0 auto;
+  }
+  .filePct{
+    font-size:12px;
+    font-weight:800;
+    color:#0b1b2b;
+  }
+  .fileRemove{
+    width:28px;height:28px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    display:grid;place-items:center;
+    cursor:pointer;
+    background:#fff;
+    color:#111;
+  }
+  .fileRemove svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+  .progTrack{
+    margin-top:8px;
+    width:100%;
+    height:8px;
+    border-radius:999px;
+    background:#eef2f7;
+    overflow:hidden;
+  }
+  .progBar{
+    height:100%;
+    width:0%;
+    background:rgba(44,125,191,.9);
+    border-radius:999px;
+    transition:width .25s ease;
+  }
+
+  /* =========================
+     NEW: Details Attachments (always visible + editable)
+     ========================= */
+  .detailAttachStrip{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    border:1px dashed rgba(44,125,191,.35);
+    background:rgba(44,125,191,.06);
+    border-radius:16px;
+    padding:12px 12px;
+    cursor:pointer;
+  }
+  .detailAttachStrip .left{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-width:0;
+  }
+
+  .detailAttachList{
+    margin-top:12px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .detailFileRow{
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:#fff;
+    padding:10px 10px;
+    box-shadow:0 6px 14px rgba(15,45,86,.05);
+  }
+  .detailFileTop{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .detailFileMeta{min-width:0;}
+  .detailFileName{
+    font-weight:700;
+    font-size:13px;
+    color:#111;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .detailFileSub{
+    margin-top:2px;
+    font-size:12px;
+    color:#6b7280;
+  }
+  .detailFileRight{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex:0 0 auto;
+  }
+  .detailFileRemove{
+    width:28px;height:28px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    display:grid;place-items:center;
+    cursor:pointer;
+    background:#fff;
+    color:#111;
+  }
+  .detailFileRemove svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
 </style>
 </head>
 
@@ -647,119 +904,178 @@
       <!-- Screen 4: Add Time Log -->
       <div class="screen off-right hidden" id="screen-add" aria-hidden="true">
         <div class="topbar">
-          <div class="backBtn" onclick="closeAddTimeLog()">
+          <!-- UPDATED: back button now respects step history -->
+          <div class="backBtn" onclick="addBack()">
             <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
           </div>
           <div class="title">Add Time Log</div>
         </div>
 
-        <div class="content" style="padding-top:12px;">
+        <!-- NEW stepper container (replaces single long scroll) -->
+        <div class="stepWrap" id="addStepper">
 
-          <!-- 1) Duration -->
-          <div class="formCard">
-            <div class="sectionHead"><span class="dot"></span> How long did you spend?</div>
+          <!-- STEP 1: Duration + Logged by + When did you do this -->
+          <div class="step active" id="step-1">
+            <div class="formCard">
+              <div class="sectionHead"><span class="dot"></span> Time spent</div>
 
-            <div class="formRow2">
-              <div>
-                <div class="formLabel">Hours</div>
-                <input id="addHours" type="number" min="0" value="0" class="formInput" />
-              </div>
-              <div>
-                <div class="formLabel">Minutes</div>
-                <input id="addMinutes" type="number" min="0" max="59" value="0" class="formInput" />
-              </div>
-            </div>
-          </div>
-
-          <!-- 2) Logged By -->
-          <div class="formCard">
-            <div class="sectionHead"><span class="dot"></span> Logged By</div>
-
-            <div class="userChip" id="loggedByChip">
-              <div class="userLeft">
-                <div class="userAvatar" id="loggedByAvatar"></div>
-                <div style="min-width:0">
-                  <div class="userName" id="loggedByName">—</div>
+              <div class="formRow2">
+                <div>
+                  <div class="formLabel">Hours</div>
+                  <input id="addHours" type="number" min="0" value="0" class="formInput" />
+                </div>
+                <div>
+                  <div class="formLabel">Minutes</div>
+                  <input id="addMinutes" type="number" min="0" max="59" value="0" class="formInput" />
                 </div>
               </div>
-              <div class="userEditBtn" onclick="toggleUserPicker()">Change</div>
-            </div>
 
-            <div id="userPickerWrap" style="display:none;margin-top:12px;">
-              <div class="formLabel">Select User</div>
-              <select id="addUser" class="formSelect"></select>
-            </div>
-          </div>
-
-          <!-- Company -->
-          <div class="formCard">
-            <div class="sectionHead"><span class="dot"></span> Company</div>
-            <select id="addCompany" class="formSelect"></select>
-          </div>
-
-          <!-- Add to Project -->
-          <div class="formCard">
-            <div class="sectionHead"><span class="dot"></span> Add to a Project?</div>
-
-            <div class="formLabel">Suggested Projects</div>
-            <div class="pillRow" id="projectPills"></div>
-
-            <div id="projectOtherWrap" style="display:none;margin-top:12px;">
-              <input id="projectOtherInput" class="formInput" placeholder="Search project" />
-            </div>
-
-            <select id="addProject" class="formSelect" style="display:none"></select>
-          </div>
-
-          <!-- Task -->
-          <div class="formCard">
-            <div class="sectionHead"><span class="dot"></span> What did you do?</div>
-            <div class="formLabel">Suggested Tasks</div>
-            <div class="pillRow" id="taskPills"></div>
-
-            <div id="taskOtherWrap" style="display:none;margin-top:12px;">
-              <input id="taskOtherInput" class="formInput" placeholder="Search task" />
-            </div>
-
-            <select id="addTask" class="formSelect" style="display:none"></select>
-          </div>
-
-          <!-- Billing -->
-          <div class="formCard">
-            <div class="sectionHead"><span class="dot"></span> Billing</div>
-
-            <div class="formLabel">How should this be billed?</div>
-            <div class="pillRow" id="billingChoiceRow">
-              <div class="choicePill billingCredits" id="pillCredits" onclick="pickBillingMode('credits')">
-                Use <span class="miniTag">(<span id="creditsLabel">0.00</span> credits)</span>
-              </div>
-              <div class="choicePill billingBillable" id="pillBillable" onclick="pickBillingMode('billable')">
-                Make Billable
+              <div class="microHint" style="margin-top:10px;">
+                Credits will auto-calculate based on time spent.
               </div>
             </div>
 
-            <div id="billableRateWrap" style="display:none;margin-top:12px;">
-              <div class="formLabel">Hourly Rate</div>
-              <input id="addHourlyRate" type="number" min="0" value="500" class="formInput" />
+            <div class="formCard">
+              <div class="sectionHead"><span class="dot"></span> Logged By</div>
+
+              <div class="userChip" id="loggedByChip">
+                <div class="userLeft">
+                  <div class="userAvatar" id="loggedByAvatar"></div>
+                  <div style="min-width:0">
+                    <div class="userName" id="loggedByName">—</div>
+                  </div>
+                </div>
+                <div class="userEditBtn" onclick="toggleUserPicker()">Change</div>
+              </div>
+
+              <div id="userPickerWrap" style="display:none;margin-top:12px;">
+                <div class="formLabel">Select User</div>
+                <select id="addUser" class="formSelect"></select>
+              </div>
             </div>
 
-            <input type="hidden" id="billingMode" value="credits" />
+            <div class="formCard">
+              <div class="sectionHead"><span class="dot"></span> When did you do this?</div>
+              <div class="formLabel">Date</div>
+              <input id="addStartDate" type="date" class="formInput" />
+            </div>
+
+            <div class="stepActions">
+              <button class="primaryBtn" onclick="goToStep(2)">Next</button>
+            </div>
           </div>
 
-          <!-- Memo -->
-          <div class="formCard">
-            <div class="sectionHead"><span class="dot"></span> Memo</div>
-            <textarea id="addComments" class="formTextarea" placeholder="Add memo / notes..."></textarea>
+          <!-- STEP 2: Task selection (TOP aligned) -->
+          <div class="step" id="step-2">
+            <!-- UPDATED: top aligned (not vertically centered) -->
+            <div class="stepCentered stepTopAligned">
+              <div class="formCard">
+                <!-- UPDATED: aligned at top already; keeping clean -->
+                <div class="sectionHead"><span class="dot"></span> What did you do?</div>
+                <div class="formLabel">Suggested Tasks</div>
+                <div class="pillRow" id="taskPills"></div>
+
+                <div id="taskOtherWrap" style="display:none;margin-top:12px;">
+                  <input id="taskOtherInput" class="formInput" placeholder="Search task" />
+                </div>
+
+                <select id="addTask" class="formSelect" style="display:none"></select>
+              </div>
+
+              <!-- UPDATED: removed micro notes + submit/skip; only Next -->
+              <div class="stepActions">
+                <button class="primaryBtn" onclick="goToStep(3)">Next</button>
+              </div>
+            </div>
           </div>
 
-          <!-- Start Date (ONLY the input — redundant row removed) -->
-          <div class="formCard">
-            <div class="sectionHead"><span class="dot"></span> Start Date</div>
-            <div class="formLabel">Start Date</div>
-            <input id="addStartDate" type="date" class="formInput" />
+          <!-- STEP 3: Tag Client (company) -> then reveal projects -->
+          <div class="step" id="step-3">
+            <div class="formCard">
+              <div class="sectionHead"><span class="dot"></span> Tag a Client?</div>
+              <div class="formLabel">Suggested Clients</div>
+              <select id="addCompany" class="formSelect"></select>
+
+              <!-- UPDATED: removed helper note -->
+            </div>
+
+            <!-- Project block (hidden until company selected) -->
+            <div class="formCard" id="projectCard" style="display:none;">
+              <div class="sectionHead"><span class="dot"></span> Add to a Project?</div>
+
+              <div class="formLabel">Suggested Projects</div>
+              <div class="pillRow" id="projectPills"></div>
+
+              <div id="projectOtherWrap" style="display:none;margin-top:12px;">
+                <input id="projectOtherInput" class="formInput" placeholder="Search project" />
+              </div>
+
+              <select id="addProject" class="formSelect" style="display:none"></select>
+            </div>
+
+            <!-- UPDATED: only Next button -->
+            <div class="stepActions">
+              <button class="primaryBtn" onclick="goToStep(4)">Next</button>
+            </div>
           </div>
 
-          <button class="primaryBtn">Submit Time Log</button>
+          <!-- STEP 4: Billing + Memo + Attachments (optional end) -->
+          <div class="step" id="step-4">
+            <div class="formCard">
+              <div class="sectionHead"><span class="dot"></span> Billing</div>
+
+              <div class="formLabel">How should this be billed?</div>
+              <div class="pillRow" id="billingChoiceRow">
+                <div class="choicePill billingCredits" id="pillCredits" onclick="pickBillingMode('credits')">
+                  Use <span class="miniTag">(<span id="creditsLabel">0.00</span> credits)</span>
+                </div>
+                <div class="choicePill billingBillable" id="pillBillable" onclick="pickBillingMode('billable')">
+                  Make Billable
+                </div>
+              </div>
+
+              <div id="billableRateWrap" style="display:none;margin-top:12px;">
+                <div class="formLabel">Hourly Rate</div>
+                <input id="addHourlyRate" type="number" min="0" value="500" class="formInput" />
+              </div>
+
+              <input type="hidden" id="billingMode" value="credits" />
+            </div>
+
+            <div class="formCard">
+              <div class="sectionHead"><span class="dot"></span> Memo</div>
+              <textarea id="addComments" class="formTextarea" placeholder="Add memo / notes..."></textarea>
+            </div>
+
+            <!-- UPDATED: Attachments realistic -->
+            <div class="formCard">
+              <div class="sectionHead"><span class="dot"></span> Attachments (Optional)</div>
+
+              <!-- hidden input -->
+              <input id="attachInput" class="fileInputHidden" type="file" multiple />
+
+              <div class="attachStrip" onclick="openAttachmentPicker()">
+                <div class="left">
+                  <div class="paperclip">
+                    <svg viewBox="0 0 24 24"><path d="M21 12.5l-8.5 8.5a5 5 0 0 1-7.07-7.07l9.2-9.2a3.5 3.5 0 0 1 4.95 4.95l-9.2 9.2a2 2 0 0 1-2.83-2.83l8.5-8.5"/></svg>
+                  </div>
+                  <div class="attachText">
+                    <div class="attachTitle">Add documents or screenshots</div>
+                    <div class="attachSub">Upload progress will appear below</div>
+                  </div>
+                </div>
+                <div class="userEditBtn" style="padding:8px 12px;">Add</div>
+              </div>
+
+              <div class="attachList" id="attachList"></div>
+            </div>
+
+            <!-- UPDATED: no submit — just Next, and it finalizes -->
+            <div class="stepActions">
+              <button class="primaryBtn" onclick="finalizeAndClose()">Next</button>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -802,7 +1118,10 @@ const TIME_LOGS = [
     task: "Make Phone Call",
     comments: "Phone calls with Bobby and Angie re billing issues with Segwik and Precision Roofing",
     user: "Jessica Cahoon",
-    id: "6966a11f33f73f2fcb0b6512"
+    id: "6966a11f33f73f2fcb0b6512",
+    attachments: [
+      { name: "Call Notes — Segwik Billing.pdf", size: 248832 }
+    ]
   },
   {
     total: "0 hours, 24 minutes",
@@ -820,7 +1139,11 @@ const TIME_LOGS = [
     task: "Review Agreement",
     comments: "Compile signatures into file and email with instructions to Plaintiff's attorney.",
     user: "Jessica Cahoon",
-    id: "69669f6bc1667006d40d9df5"
+    id: "69669f6bc1667006d40d9df5",
+    attachments: [
+      { name: "Signature Packet.pdf", size: 1048576 },
+      { name: "Email Instructions.msg", size: 81920 }
+    ]
   },
   {
     total: "0 hours, 6 minutes",
@@ -838,7 +1161,10 @@ const TIME_LOGS = [
     task: "Conduct Discovery",
     comments: "Review and make notes on Nicole Han deposition transcript",
     user: "George Brunt",
-    id: "69650641dd07b6f2b708ccd2"
+    id: "69650641dd07b6f2b708ccd2",
+    attachments: [
+      { name: "Nicole Han Deposition Transcript.pdf", size: 7340032 }
+    ]
   },
   {
     total: "0 hours, 24 minutes",
@@ -856,7 +1182,11 @@ const TIME_LOGS = [
     task: "Draft Pleadings",
     comments: "Review Final and File",
     user: "George Brunt",
-    id: "696117e50a37f50c55086544"
+    id: "696117e50a37f50c55086544",
+    attachments: [
+      { name: "Final Pleading Draft.docx", size: 356352 },
+      { name: "Filed Copy (Stamped).pdf", size: 512000 }
+    ]
   },
   {
     total: "0 hours, 12 minutes",
@@ -874,7 +1204,12 @@ const TIME_LOGS = [
     task: "Conduct Research",
     comments: "Research class action suit",
     user: "George Brunt",
-    id: "6960058c74ef3e89a50e7d34"
+    id: "6960058c74ef3e89a50e7d34",
+    attachments: [
+      { name: "Research Summary — Class Action.pdf", size: 629145 },
+      { name: "Case Law Excerpts.pdf", size: 2097152 },
+      { name: "Statutes & Notes.txt", size: 32768 }
+    ]
   }
 ];
 
@@ -953,6 +1288,14 @@ function escapeHtml(str){
 }
 function escapeAttr(s){
   return String(s||"").replaceAll("'", "\\'").replaceAll('"', '&quot;');
+}
+function formatBytes(bytes){
+  const b = Number(bytes||0);
+  if(!b) return "—";
+  const kb = b/1024;
+  const mb = kb/1024;
+  if(mb >= 1) return `${mb.toFixed(1)} MB`;
+  return `${Math.max(1, Math.round(kb))} KB`;
 }
 
 /* ---------- Render list ---------- */
@@ -1092,6 +1435,9 @@ function openAddTimeLog(){
     screenList.classList.add('hidden');
     screenList.classList.remove('off-left');
   }, 360);
+
+  // NEW: always start at Step 1
+  goToStep(1, true);
 }
 
 function closeAddTimeLog(){
@@ -1186,6 +1532,46 @@ function ensureOptionValue(selectEl, value){
   }
 }
 
+/* ---- NEW: Step navigation + history ---- */
+let ADD_STEP = 1;
+let ADD_STEP_STACK = [1];
+
+function goToStep(n, resetStack=false){
+  if(resetStack){
+    ADD_STEP_STACK = [n];
+  } else {
+    const last = ADD_STEP_STACK[ADD_STEP_STACK.length-1];
+    if(last !== n) ADD_STEP_STACK.push(n);
+  }
+  ADD_STEP = n;
+
+  document.querySelectorAll('#addStepper .step').forEach(s=>s.classList.remove('active'));
+  const target = document.getElementById(`step-${n}`);
+  if(target) target.classList.add('active');
+
+  const wrap = document.getElementById('addStepper');
+  if(wrap) wrap.scrollTop = 0;
+}
+
+/* UPDATED: back button logic for entry flow */
+function addBack(){
+  if(ADD_STEP_STACK.length > 1){
+    ADD_STEP_STACK.pop();
+    const prev = ADD_STEP_STACK[ADD_STEP_STACK.length-1] || 1;
+    ADD_STEP = prev;
+
+    document.querySelectorAll('#addStepper .step').forEach(s=>s.classList.remove('active'));
+    const target = document.getElementById(`step-${prev}`);
+    if(target) target.classList.add('active');
+
+    const wrap = document.getElementById('addStepper');
+    if(wrap) wrap.scrollTop = 0;
+    return;
+  }
+  // If we're already at step 1, then exit Add flow (original behavior)
+  closeAddTimeLog();
+}
+
 /* ---- Credits calc (dynamic) ---- */
 function calcCreditsFromDuration(){
   const hours = parseInt(document.getElementById('addHours').value || "0", 10);
@@ -1193,7 +1579,7 @@ function calcCreditsFromDuration(){
   const safeMinutes = Math.max(0, Math.min(59, minutes));
   const totalHours = Math.max(0, hours) + (safeMinutes / 60);
 
-  // 0.1 credits per hour => credits = hours / 10
+  // 1 credit per hour
   const credits = totalHours;
 
   // format nice
@@ -1204,76 +1590,6 @@ function calcCreditsFromDuration(){
 function updateCreditsLabel(){
   const labelEl = document.getElementById('creditsLabel');
   if(labelEl) labelEl.textContent = calcCreditsFromDuration();
-}
-
-function initAddForm(){
-  fillSelect(document.getElementById('addCompany'), COMPANY_OPTIONS, "Select Company...");
-  fillSelect(document.getElementById('addProject'), PROJECT_OPTIONS, "Select Project...");
-  fillSelect(document.getElementById('addTask'), TASK_OPTIONS, "Select Task...");
-  fillSelect(document.getElementById('addUser'), USER_OPTIONS, "Select User...");
-
-  // defaults
-  document.getElementById('addHours').value = 0;
-  document.getElementById('addMinutes').value = 0;
-
-  // default user
-  document.getElementById('addUser').value = LOGGED_IN_USER;
-  syncLoggedByChip();
-  syncRateToUser();
-
-  // default start date = today
-  const now = new Date();
-  const pad = n => String(n).padStart(2,'0');
-  const today = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
-  document.getElementById('addStartDate').value = today;
-
-  // billing default
-  pickBillingMode('credits');
-
-  // comments reset
-  document.getElementById('addComments').value = "";
-
-  // pills
-  buildTaskPills();
-  buildProjectPills();
-
-  // hide wraps
-  document.getElementById('taskOtherWrap').style.display = "none";
-  document.getElementById('projectOtherWrap').style.display = "none";
-  document.getElementById('userPickerWrap').style.display = "none";
-
-  // dynamic credits
-  updateCreditsLabel();
-
-  // wire listeners
-  document.getElementById('addUser').onchange = ()=>{
-    syncLoggedByChip();
-    syncRateToUser();
-  };
-
-  const hoursEl = document.getElementById('addHours');
-  const minsEl = document.getElementById('addMinutes');
-  hoursEl.oninput = updateCreditsLabel;
-  minsEl.oninput = updateCreditsLabel;
-
-  document.getElementById('taskOtherInput').value = "";
-  document.getElementById('projectOtherInput').value = "";
-
-  document.getElementById('taskOtherInput').oninput = ()=>{
-    const val = document.getElementById('taskOtherInput').value.trim();
-    if(val){
-      ensureOptionValue(document.getElementById('addTask'), val);
-      document.getElementById('addTask').value = val;
-    }
-  };
-
-  document.getElementById('projectOtherInput').oninput = ()=>{
-    const val = document.getElementById('projectOtherInput').value.trim();
-    if(val){
-      ensureOptionValue(document.getElementById('addProject'), val);
-      document.getElementById('addProject').value = val;
-    }
-  };
 }
 
 /* ---- Logged By ---- */
@@ -1421,6 +1737,297 @@ function syncRateToUser(){
   document.getElementById('addHourlyRate').value = rate;
 }
 
+/* ---- reveal projects only after client chosen ---- */
+function handleCompanySelect(){
+  const company = document.getElementById('addCompany').value;
+  const projectCard = document.getElementById('projectCard');
+  if(projectCard){
+    projectCard.style.display = company ? "block" : "none";
+  }
+}
+
+/* ---- Attachments realistic + fake loader ---- */
+let ATTACH_UPLOADS = [];
+/* =========================
+   NEW: Details attachments (editable demo)
+   - Always visible in Time Log Details
+   - Mirrors TIME_LOGS[idx].attachments (if present)
+   ========================= */
+let DETAILS_ATTACHMENTS = [];
+let DETAILS_ACTIVE_IDX = null;
+
+function openDetailsAttachmentPicker(){
+  const input = document.getElementById('detailsAttachInput');
+  if(input) input.click();
+}
+
+function formatSizeFromAttachment(a){
+  // supports both {size:number} and string
+  if(a && typeof a.size === 'number') return formatBytes(a.size);
+  return a && a.size ? String(a.size) : "—";
+}
+
+function renderDetailsAttachments(){
+  const list = document.getElementById('detailsAttachList');
+  if(!list) return;
+
+  // Always visible even when empty
+  if(!DETAILS_ATTACHMENTS.length){
+    list.innerHTML = `
+      <div class="detailFileRow">
+        <div class="detailFileTop">
+          <div class="detailFileMeta" style="min-width:0">
+            <div class="detailFileName" style="color:#64748b;font-weight:800;">No attachments yet</div>
+            <div class="detailFileSub">Add a document, screenshot, or file for this time log.</div>
+          </div>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  list.innerHTML = DETAILS_ATTACHMENTS.map(f=>`
+    <div class="detailFileRow" data-id="${f.id}">
+      <div class="detailFileTop">
+        <div class="detailFileMeta" style="min-width:0">
+          <div class="detailFileName">${escapeHtml(f.name)}</div>
+          <div class="detailFileSub">${escapeHtml(f.sizeLabel || "—")}</div>
+        </div>
+        <div class="detailFileRight">
+          <div class="detailFileRemove" onclick="removeDetailsAttachment('${f.id}')" title="Remove">
+            <svg viewBox="0 0 24 24"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function removeDetailsAttachment(id){
+  DETAILS_ATTACHMENTS = DETAILS_ATTACHMENTS.filter(x=>x.id !== id);
+  persistDetailsAttachmentsToLog();
+  renderDetailsAttachments();
+}
+
+function persistDetailsAttachmentsToLog(){
+  if(DETAILS_ACTIVE_IDX === null) return;
+  const log = TIME_LOGS[DETAILS_ACTIVE_IDX];
+  if(!log) return;
+
+  // Persist into the same model TIME_LOGS uses
+  log.attachments = DETAILS_ATTACHMENTS.map(x=>({
+    name: x.name,
+    size: x.sizeRaw || 0
+  }));
+}
+
+function loadDetailsAttachmentsFromLog(idx){
+  DETAILS_ACTIVE_IDX = idx;
+
+  const log = TIME_LOGS[idx] || {};
+  const existing = Array.isArray(log.attachments) ? log.attachments : [];
+
+  DETAILS_ATTACHMENTS = existing.map(a=>({
+    id: "da_" + Math.random().toString(16).slice(2),
+    name: a.name || "Untitled file",
+    sizeRaw: (typeof a.size === "number") ? a.size : 0,
+    sizeLabel: formatBytes((typeof a.size === "number") ? a.size : 0)
+  }));
+
+  renderDetailsAttachments();
+
+  const input = document.getElementById('detailsAttachInput');
+  if(input){
+    input.value = "";
+    input.onchange = (e)=> onDetailsFilesSelected(e.target.files);
+  }
+}
+
+function onDetailsFilesSelected(files){
+  const arr = Array.from(files || []);
+  arr.forEach(file=>{
+    DETAILS_ATTACHMENTS.unshift({
+      id: "da_" + Math.random().toString(16).slice(2),
+      name: file.name || "Untitled file",
+      sizeRaw: file.size || 0,
+      sizeLabel: formatBytes(file.size || 0)
+    });
+  });
+
+  persistDetailsAttachmentsToLog();
+  renderDetailsAttachments();
+}
+
+function openAttachmentPicker(){
+  const input = document.getElementById('attachInput');
+  if(input) input.click();
+}
+
+function renderAttachments(){
+  const list = document.getElementById('attachList');
+  if(!list) return;
+
+  list.innerHTML = ATTACH_UPLOADS.map(f=>`
+    <div class="fileRow" data-id="${f.id}">
+      <div class="fileTop">
+        <div class="fileMeta" style="min-width:0">
+          <div class="fileName">${escapeHtml(f.name)}</div>
+          <div class="fileSub">${escapeHtml(f.sizeLabel)} · ${f.done ? "Uploaded" : "Uploading..."}</div>
+        </div>
+        <div class="fileRight">
+          <div class="filePct">${f.done ? "100%" : `${Math.min(99, Math.round(f.pct))}%`}</div>
+          <div class="fileRemove" onclick="removeAttachment('${f.id}')" title="Remove">
+            <svg viewBox="0 0 24 24"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="progTrack">
+        <div class="progBar" style="width:${f.done ? 100 : Math.max(2, f.pct)}%"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function removeAttachment(id){
+  ATTACH_UPLOADS = ATTACH_UPLOADS.filter(x=>x.id !== id);
+  renderAttachments();
+}
+
+function startFakeUpload(id){
+  const tick = ()=>{
+    const idx = ATTACH_UPLOADS.findIndex(x=>x.id === id);
+    if(idx === -1) return;
+
+    const item = ATTACH_UPLOADS[idx];
+    if(item.done) return;
+
+    // accelerate near end
+    const bump = (item.pct < 80) ? (8 + Math.random()*10) : (3 + Math.random()*6);
+    item.pct = Math.min(100, item.pct + bump);
+
+    if(item.pct >= 100){
+      item.pct = 100;
+      item.done = true;
+    }
+
+    ATTACH_UPLOADS[idx] = item;
+    renderAttachments();
+
+    if(!item.done){
+      setTimeout(tick, 220 + Math.random()*180);
+    }
+  };
+  setTimeout(tick, 180);
+}
+
+function onFilesSelected(files){
+  const arr = Array.from(files || []);
+  arr.forEach(file=>{
+    const id = "f_" + Math.random().toString(16).slice(2);
+    ATTACH_UPLOADS.unshift({
+      id,
+      name: file.name || "Untitled file",
+      sizeLabel: formatBytes(file.size || 0),
+      pct: 0,
+      done: false
+    });
+    startFakeUpload(id);
+  });
+  renderAttachments();
+}
+
+/* ---- finalize: creates the log + closes ---- */
+function finalizeAndClose(){
+  submitNewTimeLog();
+}
+
+function initAddForm(){
+  fillSelect(document.getElementById('addCompany'), COMPANY_OPTIONS, "Select Client...");
+  fillSelect(document.getElementById('addProject'), PROJECT_OPTIONS, "Select Project...");
+  fillSelect(document.getElementById('addTask'), TASK_OPTIONS, "Select Task...");
+  fillSelect(document.getElementById('addUser'), USER_OPTIONS, "Select User...");
+
+  // defaults
+  document.getElementById('addHours').value = 0;
+  document.getElementById('addMinutes').value = 0;
+
+  // default user
+  document.getElementById('addUser').value = LOGGED_IN_USER;
+  syncLoggedByChip();
+  syncRateToUser();
+
+  // default date = today
+  const now = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  const today = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+  document.getElementById('addStartDate').value = today;
+
+  // billing default
+  pickBillingMode('credits');
+
+  // comments reset
+  document.getElementById('addComments').value = "";
+
+  // pills
+  buildTaskPills();
+  buildProjectPills();
+
+  // hide wraps
+  document.getElementById('taskOtherWrap').style.display = "none";
+  document.getElementById('projectOtherWrap').style.display = "none";
+  document.getElementById('userPickerWrap').style.display = "none";
+
+  // project hidden until company selected
+  document.getElementById('projectCard').style.display = "none";
+
+  // dynamic credits
+  updateCreditsLabel();
+
+  // wire listeners
+  document.getElementById('addUser').onchange = ()=>{
+    syncLoggedByChip();
+    syncRateToUser();
+  };
+
+  const hoursEl = document.getElementById('addHours');
+  const minsEl = document.getElementById('addMinutes');
+  hoursEl.oninput = updateCreditsLabel;
+  minsEl.oninput = updateCreditsLabel;
+
+  document.getElementById('taskOtherInput').value = "";
+  document.getElementById('projectOtherInput').value = "";
+
+  document.getElementById('taskOtherInput').oninput = ()=>{
+    const val = document.getElementById('taskOtherInput').value.trim();
+    if(val){
+      ensureOptionValue(document.getElementById('addTask'), val);
+      document.getElementById('addTask').value = val;
+    }
+  };
+
+  document.getElementById('projectOtherInput').oninput = ()=>{
+    const val = document.getElementById('projectOtherInput').value.trim();
+    if(val){
+      ensureOptionValue(document.getElementById('addProject'), val);
+      document.getElementById('addProject').value = val;
+    }
+  };
+
+  // company select triggers reveal
+  document.getElementById('addCompany').onchange = handleCompanySelect;
+  handleCompanySelect();
+
+  // attachments init
+  ATTACH_UPLOADS = [];
+  renderAttachments();
+
+  const attachInput = document.getElementById('attachInput');
+  if(attachInput){
+    attachInput.value = "";
+    attachInput.onchange = (e)=> onFilesSelected(e.target.files);
+  }
+}
+
 /* ---------- Submit Time Log ---------- */
 function submitNewTimeLog(){
   const company = document.getElementById('addCompany').value;
@@ -1443,14 +2050,16 @@ function submitNewTimeLog(){
   // credits based on duration
   const credits = calcCreditsFromDuration();
 
-  if(!company){ alert("Please select a Company."); return; }
-  if(!task){ alert("Please choose a Task (or use Other Task)."); return; }
-  if(!project){ alert("Please choose a Project (or use Other Project)."); return; }
+  // Validation — keep minimal; task required
+  if(!task){
+    alert("Please choose a Task (or use Other Task).");
+    return;
+  }
 
   const newLog = {
     total: totalLabel,
-    company,
-    project,
+    company: company || "—",
+    project: project || "—",
     task,
     comments,
     user,
@@ -1468,6 +2077,7 @@ function submitNewTimeLog(){
     hours, minutes: safeMinutes,
     billingMode, billable, hourlyRate,
     credits,
+    attachments: ATTACH_UPLOADS.map(x=>({name:x.name, done:x.done, pct:x.pct})),
     comments
   });
 }
@@ -1559,8 +2169,39 @@ function openDetails(idx){
       <div class="kv"><div class="k">Credits Used</div><div class="v">${billable === "Yes" ? creditsUsed : `<span class="mutedV">0 credits</span>`}</div></div>
     </div>
   </div>
+
+  <!-- =========================
+       NEW: Attachments (always visible + editable)
+       ========================= -->
+  <div class="fieldCard" id="detailsAttachmentsCard">
+    <div class="fieldTitle"><span class="dot"></span> Attachments</div>
+
+    <!-- Hidden input (details screen) -->
+    <input id="detailsAttachInput" class="fileInputHidden" type="file" multiple />
+
+    <div class="detailAttachStrip" onclick="openDetailsAttachmentPicker()">
+      <div class="left">
+        <div class="paperclip">
+          <svg viewBox="0 0 24 24"><path d="M21 12.5l-8.5 8.5a5 5 0 0 1-7.07-7.07l9.2-9.2a3.5 3.5 0 0 1 4.95 4.95l-9.2 9.2a2 2 0 0 1-2.83-2.83l8.5-8.5"/></svg>
+        </div>
+        <div class="attachText">
+          <div class="attachTitle">Add documents or screenshots</div>
+          <div class="attachSub">Attachments are saved to this time log</div>
+        </div>
+      </div>
+      <div class="userEditBtn" style="padding:8px 12px;">Add</div>
+    </div>
+
+    <!-- always shown: list can be empty -->
+    <div class="detailAttachList" id="detailsAttachList"></div>
+  </div>
 `;
+
+  // NEW: Always show attachments section (even if empty)
+  loadDetailsAttachmentsFromLog(idx);
+
   navToDetails();
+
 }
 
 /* ---------- Demo stubs ---------- */
