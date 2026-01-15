@@ -418,6 +418,34 @@
     margin:12px 0;
   }
 
+  /* =========================
+     NEW: "Optional" visual language (without saying optional)
+     - muted until engaged
+     ========================= */
+  .formCard.softDisabled{
+    opacity:.65;
+    filter:saturate(.7);
+    box-shadow:none;
+    border-style:dashed;
+  }
+  .formCard.softDisabled .sectionHead{
+    color:#6b7280;
+  }
+  .formCard.softDisabled select,
+  .formCard.softDisabled input,
+  .formCard.softDisabled textarea{
+    background:#f8fafc;
+    cursor:pointer;
+  }
+
+  /* subtle “tap to engage” glow */
+  .formCard.engaged{
+    opacity:1;
+    filter:none;
+    box-shadow:0 10px 24px rgba(15,45,86,.10);
+    border-style:solid;
+  }
+
   .formLabel{
     font-size:12px;
     font-weight:500;
@@ -990,9 +1018,10 @@
           </div>
 
           <!-- STEP 3: Tag Client (company) -> then reveal projects -->
-          <div class="step" id="step-3">
-            <div class="formCard">
+                    <div class="step" id="step-3">
+            <div class="formCard softDisabled" id="clientCard">
               <div class="sectionHead"><span class="dot"></span> Tag a Client?</div>
+
               <div class="formLabel">Suggested Clients</div>
               <select id="addCompany" class="formSelect"></select>
 
@@ -1000,7 +1029,7 @@
             </div>
 
             <!-- Project block (hidden until company selected) -->
-            <div class="formCard" id="projectCard" style="display:none;">
+            <div class="formCard softDisabled" id="projectCard" style="display:none;">
               <div class="sectionHead"><span class="dot"></span> Add to a Project?</div>
 
               <div class="formLabel">Suggested Projects</div>
@@ -1702,6 +1731,13 @@ function selectProjectPill(project){
     document.getElementById('projectOtherInput').focus();
     document.getElementById('addProject').value = "";
   } else {
+        // NEW: project selected -> project card becomes engaged (no longer muted)
+    const projectCard = document.getElementById('projectCard');
+    if(projectCard){
+      projectCard.classList.add('engaged');
+      projectCard.classList.remove('softDisabled');
+    }
+
     const otherPill = pills.find(p=>p.textContent.includes('Other Project'));
     if(otherPill) otherPill.style.display = "inline-flex";
 
@@ -1739,12 +1775,35 @@ function syncRateToUser(){
 
 /* ---- reveal projects only after client chosen ---- */
 function handleCompanySelect(){
-  const company = document.getElementById('addCompany').value;
+  const companyEl = document.getElementById('addCompany');
+  const company = companyEl.value;
+
+  const clientCard = document.getElementById('clientCard');
+  if(clientCard){
+    if(company){
+      // selected -> engage
+      clientCard.classList.add('engaged');
+      clientCard.classList.remove('softDisabled');
+    } else {
+      // nothing selected -> stay muted
+      clientCard.classList.remove('engaged');
+      clientCard.classList.add('softDisabled');
+    }
+  }
+
   const projectCard = document.getElementById('projectCard');
   if(projectCard){
     projectCard.style.display = company ? "block" : "none";
+
+    if(company){
+      // shown but still muted until project chosen
+      projectCard.classList.remove('engaged');
+      projectCard.classList.add('softDisabled');
+    }
   }
 }
+
+
 
 /* ---- Attachments realistic + fake loader ---- */
 let ATTACH_UPLOADS = [];
@@ -1979,6 +2038,12 @@ function initAddForm(){
 
   // project hidden until company selected
   document.getElementById('projectCard').style.display = "none";
+// force client card to start muted
+const clientCard = document.getElementById('clientCard');
+if(clientCard){
+  clientCard.classList.remove('engaged');
+  clientCard.classList.add('softDisabled');
+}
 
   // dynamic credits
   updateCreditsLabel();
@@ -2014,8 +2079,25 @@ function initAddForm(){
   };
 
   // company select triggers reveal
-  document.getElementById('addCompany').onchange = handleCompanySelect;
+  const addCompanyEl = document.getElementById('addCompany');
+  addCompanyEl.onchange = handleCompanySelect;
+
+ addCompanyEl.onfocus = ()=>{};
+
+  // NEW: project card engages when user focuses project dropdown
+  const addProjectEl = document.getElementById('addProject');
+  if(addProjectEl){
+    addProjectEl.onfocus = ()=>{
+      const pc = document.getElementById('projectCard');
+      if(pc){
+        pc.classList.add('engaged');
+        pc.classList.remove('softDisabled');
+      }
+    };
+  }
+
   handleCompanySelect();
+
 
   // attachments init
   ATTACH_UPLOADS = [];
@@ -2204,13 +2286,7 @@ function openDetails(idx){
 
 }
 
-/* ---------- Demo stubs ---------- */
-function demoViewsPlus(){ alert("Plus tapped — create a new Time Log View."); }
-function pickView(){ alert("View selected (demo)"); }
-function viewCompany(){ alert("View company (demo)"); }
-function actionCall(){ alert("Call (demo)"); }
-function actionText(){ alert("Text (demo)"); }
-function actionEmail(){ alert("Email (demo)"); }
+
 
 /* Init */
 renderList();
