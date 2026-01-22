@@ -857,6 +857,121 @@
     color:#111;
   }
   .detailFileRemove svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  /* =========================
+     NEW: Billing Split UI (credits + billable)
+     ========================= */
+  .tinyNote{
+    font-size:12px;
+    color:#6b7280;
+    line-height:1.35;
+    margin-top:8px;
+  }
+
+  .splitRow{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:10px 12px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    background:#fff;
+    margin-top:10px;
+  }
+  .splitRow .left{
+    min-width:0;
+  }
+  .splitRow .label{
+    font-weight:700;
+    font-size:13px;
+    color:#111;
+    line-height:1.15;
+  }
+  .splitRow .sub{
+    margin-top:4px;
+    font-size:12px;
+    color:#6b7280;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .splitRow .right{
+    flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+
+  .miniInput{
+    width:92px;
+    padding:10px 10px;
+    border-radius:12px;
+    border:1px solid var(--line);
+    font-size:13px;
+    font-weight:700;
+    text-align:right;
+    outline:none;
+    background:#fff;
+  }
+
+  .miniToggle{
+    width:44px;height:26px;border-radius:999px;
+    background:#e5e7eb;
+    position:relative;
+    cursor:pointer;
+    flex:0 0 auto;
+    border:1px solid #d1d5db;
+  }
+  .miniToggle::after{
+    content:"";
+    position:absolute;top:50%;left:3px;transform:translateY(-50%);
+    width:20px;height:20px;border-radius:999px;
+    background:#fff;
+    box-shadow:0 4px 10px rgba(0,0,0,.12);
+    transition:left .18s ease;
+  }
+  .miniToggle.on{
+    background:rgba(44,125,191,.35);
+    border-color:rgba(44,125,191,.35);
+  }
+  .miniToggle.on::after{left:21px;}
+
+  .billSummary{
+    margin-top:12px;
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:#fff;
+    padding:12px;
+    box-shadow:0 6px 14px rgba(15,45,86,.05);
+  }
+  .billSummaryTitle{
+    font-weight:800;
+    font-size:13px;
+    color:#111;
+    margin-bottom:10px;
+  }
+  .billSummaryGrid{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:8px 10px;
+    font-size:13px;
+  }
+  .billSummaryGrid .k{color:#6b7280;font-weight:700;}
+  .billSummaryGrid .v{color:#111;font-weight:800;}
+  .billError{
+    display:none;
+    margin-top:10px;
+    border:1px solid rgba(239,68,68,.35);
+    background:rgba(239,68,68,.08);
+    color:#7f1d1d;
+    border-radius:14px;
+    padding:10px 12px;
+    font-size:12px;
+    font-weight:800;
+    line-height:1.35;
+  }
+  .billError.show{display:block;}
 
 </style>
 </head>
@@ -1050,26 +1165,71 @@
 
           <!-- STEP 4: Billing + Memo + Attachments (optional end) -->
           <div class="step" id="step-4">
-            <div class="formCard">
+                        <div class="formCard">
               <div class="sectionHead"><span class="dot"></span> Billing</div>
 
-              <div class="formLabel">How should this be billed?</div>
-              <div class="pillRow" id="billingChoiceRow">
-                <div class="choicePill billingCredits" id="pillCredits" onclick="pickBillingMode('credits')">
-                  Use <span class="miniTag">(<span id="creditsLabel">0.00</span> credits)</span>
+              <!-- NEW: small recap of duration from step 1 -->
+              <div class="tinyNote">
+                Duration entered: <b><span id="durationTiny">0.00</span> hours</b>
+                <span style="opacity:.75;">(this is the max you can allocate)</span>
+              </div>
+
+              <!-- CREDITS toggle + allocation -->
+              <div class="splitRow" id="creditsSplitRow">
+                <div class="left">
+                  <div class="label">Use Credits</div>
+                  <div class="sub">Available: <b><span id="creditsRemainingLabel">0.00</span></b> credits</div>
                 </div>
-                <div class="choicePill billingBillable" id="pillBillable" onclick="pickBillingMode('billable')">
-                  Make Billable
+                <div class="right">
+                  <input id="creditsToUse" type="number" min="0" step="0.01" class="miniInput" value="0.00" />
+                  <div class="miniToggle on" id="toggleUseCredits" onclick="toggleUseCredits()"></div>
                 </div>
               </div>
 
+              <!-- BILLABLE toggle + allocation -->
+              <div class="splitRow" id="billableSplitRow">
+                <div class="left">
+                  <div class="label">Make Billable</div>
+                  <div class="sub">Remainder will be billed automatically</div>
+                </div>
+                <div class="right">
+                  <input id="billableHours" type="number" min="0" step="0.01" class="miniInput" value="0.00" />
+                  <div class="miniToggle" id="toggleBillable" onclick="toggleBillable()"></div>
+                </div>
+              </div>
+
+              <!-- Billable rate -->
               <div id="billableRateWrap" style="display:none;margin-top:12px;">
                 <div class="formLabel">Hourly Rate</div>
                 <input id="addHourlyRate" type="number" min="0" value="500" class="formInput" />
+                <div class="tinyNote">
+                  Standard discount: <b><span id="discountLabel">25</span>%</b>
+                </div>
               </div>
 
-              <input type="hidden" id="billingMode" value="credits" />
+              <!-- Summary -->
+              <div class="billSummary" id="billSummary">
+                <div class="billSummaryTitle">Billing Summary</div>
+                <div class="billSummaryGrid">
+                  <div class="k">Credits Used</div>
+                  <div class="v"><span id="sumCreditsUsed">0.00</span></div>
+
+                  <div class="k">Billable Before Discount</div>
+                  <div class="v">$<span id="sumBeforeDiscount">0.00</span></div>
+
+                  <div class="k">Billable After Discount</div>
+                  <div class="v">$<span id="sumAfterDiscount">0.00</span></div>
+                </div>
+              </div>
+
+              <div class="billError" id="billErrorBox"></div>
+
+              <!-- Hidden fields used for submit payload -->
+              <input type="hidden" id="billingUseCredits" value="1" />
+              <input type="hidden" id="billingMakeBillable" value="0" />
+              <input type="hidden" id="billingMode" value="split" />
             </div>
+
 
             <div class="formCard">
               <div class="sectionHead"><span class="dot"></span> Memo</div>
@@ -1524,6 +1684,237 @@ function fillSelect(selectEl, options, placeholder){
 }
 
 const LOGGED_IN_USER = "Jessica Cahoon";
+/* =========================
+   NEW: Split Billing State
+   ========================= */
+
+// Example: remaining credits for this company/user context
+// (Replace later with company profile lookup)
+const CREDITS_REMAINING = 0.60;
+
+// Example: standard discount pulled from company profile
+const COMPANY_STANDARD_DISCOUNT_PCT = 25;
+
+function to2(n){
+  const x = Number(n || 0);
+  return (Math.round(x * 100) / 100).toFixed(2);
+}
+
+function clamp(n, min, max){
+  const x = Number(n || 0);
+  if(Number.isNaN(x)) return min;
+  return Math.min(max, Math.max(min, x));
+}
+
+function durationHoursFloat(){
+  const hours = parseInt(document.getElementById('addHours').value || "0", 10);
+  const minutes = parseInt(document.getElementById('addMinutes').value || "0", 10);
+  const safeMinutes = Math.max(0, Math.min(59, minutes));
+  return Math.max(0, hours) + (safeMinutes / 60);
+}
+
+function updateDurationTiny(){
+  const dur = durationHoursFloat();
+  const el = document.getElementById('durationTiny');
+  if(el) el.textContent = to2(dur);
+
+  const remEl = document.getElementById('creditsRemainingLabel');
+  if(remEl) remEl.textContent = to2(CREDITS_REMAINING);
+
+  const discEl = document.getElementById('discountLabel');
+  if(discEl) discEl.textContent = String(COMPANY_STANDARD_DISCOUNT_PCT);
+}
+
+function toggleUseCredits(){
+  const t = document.getElementById('toggleUseCredits');
+  const hidden = document.getElementById('billingUseCredits');
+  const creditsInput = document.getElementById('creditsToUse');
+  if(!t || !hidden) return;
+
+  const isOn = t.classList.contains('on');
+
+  if(isOn){
+    // TURN OFF credits
+    t.classList.remove('on');
+    hidden.value = "0";
+
+    if(creditsInput){
+      creditsInput.value = to2(0);
+      creditsInput.disabled = true;
+      creditsInput.style.opacity = ".55";
+      creditsInput.style.cursor = "not-allowed";
+    }
+  } else {
+    // TURN ON credits
+    t.classList.add('on');
+    hidden.value = "1";
+
+    if(creditsInput){
+      creditsInput.disabled = false;
+      creditsInput.style.opacity = "1";
+      creditsInput.style.cursor = "text";
+
+      // SMART PREFILL
+      const dur = durationHoursFloat();
+      const prefill = Math.min(dur, CREDITS_REMAINING);
+      creditsInput.value = to2(prefill);
+    }
+  }
+
+  recomputeBillingSplit(true);
+}
+
+
+function toggleBillable(){
+  const t = document.getElementById('toggleBillable');
+  const hidden = document.getElementById('billingMakeBillable');
+  if(!t || !hidden) return;
+
+  const isOn = t.classList.contains('on');
+  if(isOn){
+    t.classList.remove('on');
+    hidden.value = "0";
+  } else {
+    t.classList.add('on');
+    hidden.value = "1";
+  }
+
+  // show/hide hourly rate
+  const wrap = document.getElementById('billableRateWrap');
+  if(wrap){
+    wrap.style.display = (!isOn) ? "block" : "none";
+  }
+
+  recomputeBillingSplit(true);
+}
+
+function setBillingError(msg){
+  const box = document.getElementById('billErrorBox');
+  if(!box) return;
+  if(msg){
+    box.textContent = msg;
+    box.classList.add('show');
+  } else {
+    box.textContent = "";
+    box.classList.remove('show');
+  }
+}
+
+function recomputeBillingSplit(forceNormalize=false){
+  // Only runs if Step 4 elements exist
+  const creditsInput = document.getElementById('creditsToUse');
+  const billableInput = document.getElementById('billableHours');
+  const useCredits = document.getElementById('billingUseCredits');
+  const makeBillable = document.getElementById('billingMakeBillable');
+  if(!creditsInput || !billableInput || !useCredits || !makeBillable) return;
+
+  const dur = durationHoursFloat();
+
+  // Toggle state
+  const useCreditsOn = (useCredits.value === "1");
+  const billableOn = (makeBillable.value === "1");
+
+  // If neither selected, default to credits on
+  if(!useCreditsOn && !billableOn){
+    document.getElementById('toggleUseCredits')?.classList.add('on');
+    useCredits.value = "1";
+  }
+
+  // Parse inputs
+  let creditsToUse = clamp(parseFloat(creditsInput.value || "0"), 0, 999999);
+  let billableHours = clamp(parseFloat(billableInput.value || "0"), 0, 999999);
+
+  // Credits rules
+  if(!useCreditsOn){
+    creditsToUse = 0;
+    creditsInput.value = to2(0);
+    creditsInput.disabled = true;
+    creditsInput.style.opacity = ".55";
+    creditsInput.style.cursor = "not-allowed";
+  } else {
+    creditsInput.disabled = false;
+    creditsInput.style.opacity = "1";
+    creditsInput.style.cursor = "text";
+  }
+
+
+  // Billable rules
+  if(!billableOn){
+    billableHours = 0;
+    billableInput.value = to2(0);
+  }
+
+  // Auto-normalize behavior:
+  // - credits max = min(duration, credits remaining)
+  // - if billable on, billable becomes remainder (duration - credits used)
+  // - user can type either input; we enforce total not exceeding duration
+  const creditsMax = Math.min(dur, CREDITS_REMAINING);
+
+  if(forceNormalize){
+    // If user typed credits, clamp credits, then remainder billable
+    creditsToUse = clamp(creditsToUse, 0, creditsMax);
+    if(billableOn){
+      billableHours = Math.max(0, dur - creditsToUse);
+    } else {
+      // no billable: credits cannot exceed duration
+      creditsToUse = clamp(creditsToUse, 0, dur);
+    }
+  }
+
+  // Total validation: cannot exceed duration
+  const totalAlloc = creditsToUse + billableHours;
+  if(totalAlloc > dur + 0.0001){
+    // Reduce billable first if enabled, otherwise reduce credits
+    const over = totalAlloc - dur;
+    if(billableOn && billableHours > 0){
+      billableHours = Math.max(0, billableHours - over);
+    } else {
+      creditsToUse = Math.max(0, creditsToUse - over);
+    }
+  }
+
+  // Final clamp again
+  creditsToUse = clamp(creditsToUse, 0, creditsMax);
+  billableHours = clamp(billableHours, 0, dur);
+
+  // If billable is ON, ensure remainder is accurate
+  if(billableOn){
+    billableHours = Math.max(0, dur - creditsToUse);
+  }
+
+  // If credits is OFF, ensure billable is full duration when ON
+  if(!useCreditsOn && billableOn){
+    billableHours = dur;
+  }
+
+  // Persist back into inputs
+  creditsInput.value = to2(creditsToUse);
+  billableInput.value = to2(billableHours);
+
+  // Show duration mismatch error if can't allocate correctly
+  // (Allow minor floating error)
+  const finalTotal = creditsToUse + billableHours;
+  const diff = Math.abs(finalTotal - dur);
+
+  if(diff > 0.02){
+    setBillingError(`Billing allocation must equal duration (${to2(dur)} hrs). Current: ${to2(finalTotal)} hrs.`);
+  } else {
+    setBillingError("");
+  }
+
+  // Summary
+  const hourlyRate = parseFloat(document.getElementById('addHourlyRate')?.value || "0");
+  const beforeDiscount = billableHours * hourlyRate;
+  const afterDiscount = beforeDiscount * (1 - (COMPANY_STANDARD_DISCOUNT_PCT / 100));
+
+  const sumCreditsUsed = document.getElementById('sumCreditsUsed');
+  const sumBefore = document.getElementById('sumBeforeDiscount');
+  const sumAfter = document.getElementById('sumAfterDiscount');
+
+  if(sumCreditsUsed) sumCreditsUsed.textContent = to2(creditsToUse);
+  if(sumBefore) sumBefore.textContent = to2(beforeDiscount);
+  if(sumAfter) sumAfter.textContent = to2(afterDiscount);
+}
 
 const USER_RATES = {
   "Jessica Cahoon": 500,
@@ -1580,7 +1971,35 @@ function goToStep(n, resetStack=false){
 
   const wrap = document.getElementById('addStepper');
   if(wrap) wrap.scrollTop = 0;
+
+  // NEW: when arriving at Billing step, smart-prefill credits + recompute
+  if(n === 4){
+    updateDurationTiny();
+
+    const creditsInput = document.getElementById('creditsToUse');
+    const useCreditsOn = (document.getElementById('billingUseCredits')?.value === "1");
+
+    if(creditsInput){
+      if(useCreditsOn){
+        creditsInput.disabled = false;
+        creditsInput.style.opacity = "1";
+        creditsInput.style.cursor = "text";
+
+        const dur = durationHoursFloat();
+        const prefill = Math.min(dur, CREDITS_REMAINING);
+        creditsInput.value = to2(prefill);
+      } else {
+        creditsInput.value = to2(0);
+        creditsInput.disabled = true;
+        creditsInput.style.opacity = ".55";
+        creditsInput.style.cursor = "not-allowed";
+      }
+    }
+
+    recomputeBillingSplit(true);
+  }
 }
+
 
 /* UPDATED: back button logic for entry flow */
 function addBack(){
@@ -1619,7 +2038,12 @@ function calcCreditsFromDuration(){
 function updateCreditsLabel(){
   const labelEl = document.getElementById('creditsLabel');
   if(labelEl) labelEl.textContent = calcCreditsFromDuration();
+
+  // NEW: also update Step 4 split UI if it exists
+  updateDurationTiny();
+  recomputeBillingSplit();
 }
+
 
 /* ---- Logged By ---- */
 function syncLoggedByChip(){
@@ -2021,8 +2445,36 @@ function initAddForm(){
   const today = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
   document.getElementById('addStartDate').value = today;
 
-  // billing default
-  pickBillingMode('credits');
+  // billing default (NEW split billing)
+  // default: use credits ON; billable OFF
+  const tCredits = document.getElementById('toggleUseCredits');
+  const tBillable = document.getElementById('toggleBillable');
+  const useCredits = document.getElementById('billingUseCredits');
+  const makeBillable = document.getElementById('billingMakeBillable');
+
+  if(tCredits) tCredits.classList.add('on');
+  if(useCredits) useCredits.value = "1";
+
+  if(tBillable) tBillable.classList.remove('on');
+  if(makeBillable) makeBillable.value = "0";
+
+  const rateWrap = document.getElementById('billableRateWrap');
+  if(rateWrap) rateWrap.style.display = "none";
+
+  // defaults for split inputs
+  const ctu = document.getElementById('creditsToUse');
+  if(ctu){
+    ctu.value = to2(Math.min(durationHoursFloat(), CREDITS_REMAINING));
+    ctu.disabled = false;
+    ctu.style.opacity = "1";
+    ctu.style.cursor = "text";
+  }
+
+  if(document.getElementById('billableHours')) document.getElementById('billableHours').value = to2(Math.max(0, durationHoursFloat() - Math.min(durationHoursFloat(), CREDITS_REMAINING)));
+
+  updateDurationTiny();
+  recomputeBillingSplit(true);
+
 
   // comments reset
   document.getElementById('addComments').value = "";
@@ -2056,8 +2508,17 @@ if(clientCard){
 
   const hoursEl = document.getElementById('addHours');
   const minsEl = document.getElementById('addMinutes');
-  hoursEl.oninput = updateCreditsLabel;
-  minsEl.oninput = updateCreditsLabel;
+  hoursEl.oninput = ()=>{
+    updateCreditsLabel();
+    updateDurationTiny();
+    recomputeBillingSplit(true);
+  };
+  minsEl.oninput = ()=>{
+    updateCreditsLabel();
+    updateDurationTiny();
+    recomputeBillingSplit(true);
+  };
+
 
   document.getElementById('taskOtherInput').value = "";
   document.getElementById('projectOtherInput').value = "";
@@ -2097,6 +2558,37 @@ if(clientCard){
   }
 
   handleCompanySelect();
+  // NEW: Step 4 billing listeners
+  const creditsToUseEl = document.getElementById('creditsToUse');
+  const billableHoursEl = document.getElementById('billableHours');
+  const hourlyRateEl = document.getElementById('addHourlyRate');
+
+  if(creditsToUseEl){
+    creditsToUseEl.oninput = ()=> recomputeBillingSplit(true);
+  }
+  if(billableHoursEl){
+    billableHoursEl.oninput = ()=>{
+      // If user types billable hours, compute credits remainder (only when credits ON)
+      const useCredits = document.getElementById('billingUseCredits')?.value === "1";
+      const billableOn = document.getElementById('billingMakeBillable')?.value === "1";
+      if(!billableOn) return recomputeBillingSplit(true);
+
+      const dur = durationHoursFloat();
+      let b = clamp(parseFloat(billableHoursEl.value||"0"), 0, dur);
+      billableHoursEl.value = to2(b);
+
+      if(useCredits){
+        const creditsEl = document.getElementById('creditsToUse');
+        const creditsMax = Math.min(dur, CREDITS_REMAINING);
+        const c = clamp(dur - b, 0, creditsMax);
+        if(creditsEl) creditsEl.value = to2(c);
+      }
+      recomputeBillingSplit(true);
+    };
+  }
+  if(hourlyRateEl){
+    hourlyRateEl.oninput = ()=> recomputeBillingSplit(false);
+  }
 
 
   // attachments init
@@ -2125,12 +2617,40 @@ function submitNewTimeLog(){
   const comments = document.getElementById('addComments').value || "";
   const startDate = document.getElementById('addStartDate').value;
 
-  const billingMode = document.getElementById('billingMode').value || "credits";
-  const billable = (billingMode === "billable") ? "Yes" : "No";
-  const hourlyRate = parseFloat(document.getElementById('addHourlyRate').value || "0");
+  const billingMode = document.getElementById('billingMode').value || "split";
 
-  // credits based on duration
-  const credits = calcCreditsFromDuration();
+  const hourlyRate = parseFloat(document.getElementById('addHourlyRate')?.value || "0");
+  const discountPct = COMPANY_STANDARD_DISCOUNT_PCT;
+
+  // NEW: split allocation
+  const dur = durationHoursFloat();
+
+  const useCredits = (document.getElementById('billingUseCredits')?.value === "1");
+  const makeBillable = (document.getElementById('billingMakeBillable')?.value === "1");
+
+  const creditsUsed = useCredits ? clamp(parseFloat(document.getElementById('creditsToUse')?.value || "0"), 0, Math.min(dur, CREDITS_REMAINING)) : 0;
+  const billableHours = makeBillable ? clamp(parseFloat(document.getElementById('billableHours')?.value || "0"), 0, dur) : 0;
+
+  // HARD VALIDATION: cannot exceed duration
+  if((creditsUsed + billableHours) > (dur + 0.02)){
+    alert(`Billing allocation cannot exceed duration. Duration: ${to2(dur)} hrs`);
+    return;
+  }
+
+  // HARD VALIDATION: if billable ON, billable must be remainder
+  if(makeBillable){
+    const expectedBillable = Math.max(0, dur - creditsUsed);
+    if(Math.abs(expectedBillable - billableHours) > 0.02){
+      alert(`Billable hours must equal the remainder. Expected ${to2(expectedBillable)} hrs.`);
+      return;
+    }
+  }
+
+  const billable = makeBillable ? "Yes" : "No";
+
+  const billableBeforeDiscount = billableHours * hourlyRate;
+  const billableAfterDiscount = billableBeforeDiscount * (1 - (discountPct / 100));
+
 
   // Validation — keep minimal; task required
   if(!task){
@@ -2158,7 +2678,14 @@ function submitNewTimeLog(){
     startDate,
     hours, minutes: safeMinutes,
     billingMode, billable, hourlyRate,
-    credits,
+    durationHours: dur,
+    creditsRemaining: CREDITS_REMAINING,
+    discountPct,
+    creditsUsed: to2(creditsUsed),
+    billableHours: to2(billableHours),
+    billableBeforeDiscount: to2(billableBeforeDiscount),
+    billableAfterDiscount: to2(billableAfterDiscount),
+
     attachments: ATTACH_UPLOADS.map(x=>({name:x.name, done:x.done, pct:x.pct})),
     comments
   });
